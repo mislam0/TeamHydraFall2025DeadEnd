@@ -1,0 +1,42 @@
+# id|name|description|N|E|S|W
+1|Your Cell|You're in a small cell. There is nothing in the room except you.|0|2|0|0
+2|Next Cell|You're in a small cell. You notice the door is opened to the south.|0|0|3|1
+3|Cell Hall|You are in the cell hall, you see nothing but dust.|2|4|0|0
+4|Crypts Beginnings|You are now in a room that has seen better days. There is nothing here for you.|0|5|0|3
+5|Think|The room you are in doesn’t seem unusual.|6|7|0|0
+6|Secret Room 1|Walking through a small corridor, you find a hidden room.|0|0|5|0
+7|Whispering Winds|There are many cracks in the wall. You think you can hear something.|0|8|20|5
+8|Guarding Treasure|Bones scattered around, and it reeks of dried blood.|0|9|0|7
+9|Barren Chamber|There is nothing in this room but the doors.|0|11|10|8
+10|Useful|The walls are smooth and pillars surround a pedestal.|9|0|0|0
+11|Puzzling|Walls are etched with strange marks. It looks confusing.|12|0|0|9
+12|Stone Walls|Solid stone walls surround you. Claustrophobic.|14|0|11|13
+13|Beast’s Lair|Shadows twist unnaturally along the walls.|0|12|0|0
+14|Dingy Hallway|Cobwebs cover broken stone.|15|0|12|0
+15|Sealed Room|Glowing mushrooms cast eerie light.|0|16|0|14
+16|Dusty Chamber|Dust curls along the floor.|0|18|17|15
+17|Secret Room 2|A hidden room through a short corridor.|16|0|0|0
+18|Trial of Thought|Cryptic symbols line all four walls.|0|19|0|16
+19|Fight For It|Red stains mark the stone floor beneath an altar.|0|0|0|18
+20|Long Corridor|The floor is uneven and cracked.|7|0|21|0
+21|Beast Within|Bones and weapons decorate the walls.|20|0|23|22
+22|Dead End|You fell back into the cells. Locked in.|0|0|0|0
+23|Sanctuary|A turning hallway leads onward.|21|24|0|0
+24|Twin Crypts|The stairway led you here.|25|0|0|0
+25|Trap|A broken altar surrounded by faded murals.|0|26|24|0
+26|Wide Corridor|Dusty tomes and scrolls scattered around.|27|36|31|25
+27|Gallery|Floor covered with bones forming patterns.|28|0|26|0
+28|Fiend Sepulcher|Bones and debris everywhere.|0|29|27|0
+29|Secret Room 3|You find a hidden room.|0|0|0|28
+30|Secret Room 4|A small alcove hidden in the wall.|0|0|26|0
+31|Switch|Irregular ceiling, shifting heights.|26|0|32|0
+32|Abandoned Hope|Sticky webs in this dark chamber.|31|0|0|33
+33|Monster Pit|Skull piles whisper warnings.|0|32|35|34
+34|Rusted Hands|Light flickers from torches.|0|33|0|0
+35|Secret Room 5|A hidden room covered in cobwebs.|33|0|0|0
+36|Treasure Den|Rusted weapons line the walls.|37|0|39|26
+37|Hidden Pattern|Faint markings on the floor.|0|38|36|0
+38|Relic Chamber|Stone pillars rise around you.|0|0|0|37
+39|Last Gate|Grand doors to the south.|36|0|40|0
+40|Beast at the End|A grand room filled with bones.|39|0|41|0
+41|Freedom|Light shines ahead — you're free!|40|0|0|0
