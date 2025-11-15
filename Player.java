@@ -13,7 +13,7 @@ public class Player {
         this.visitedRooms = new HashSet<>();
         this.visitedRooms.add(currentRoomNumber);
         this.hp = 100;
-        this.baseAttackDamage = 5;
+        this.baseAttackDamage = 0;
         this.inventory = new ArrayList<>();
         this.equippedItem = null;
     }
@@ -117,6 +117,29 @@ public class Player {
             System.out.println("Healed " + item.getHealing() + " HP. Current HP: " + hp);
         } else {
             System.out.println("Cannot use this item to heal.");
+        }
+    }
+
+    public void help() {
+        System.out.println(
+        "Available commands:\n"+
+        "> MOVE <direction>: moves the player in the specified direction (NORTH, SOUTH, EAST, WEST)\n" +
+        "> EXPLORE: lists items in the room \n" + 
+        "> PICKUP <item>: picks up an item from the room, \n" + 
+        "> DROP <item>: drops an item into the room, \n" + 
+        "> INSPECT <item>: shows item description, \n" + 
+        "> EQUIP <item>: equips an item, \n" +
+        "> HEAL <item>: uses a healing item, \n" +
+        "> INVENTORY: lists items in inventory, \n" +
+        "> QUIT: exits the game.");
+    }
+
+    public void printStatus() {
+        System.out.println("Player HP: " + hp);
+        if (equippedItem != null) {
+            System.out.println("Equipped Item: " + equippedItem.getName() + " (Damage: " + equippedItem.getDamage() + ")");
+        } else {
+            System.out.println("No item equipped.");
         }
     }
 

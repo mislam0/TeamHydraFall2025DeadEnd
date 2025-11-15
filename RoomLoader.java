@@ -98,6 +98,13 @@ public class RoomLoader {
                     else player.getInventory().forEach(i -> System.out.println("- " + i.getName()));
                     break;
 
+                    case "HELP":
+                    player.help();
+                    break;
+
+                    case "STATUS":
+                    player.printStatus();
+                    break;
 
                 case "QUIT":
                     System.out.println("Thanks for playing!");
