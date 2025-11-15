@@ -1,41 +1,47 @@
 import java.io.*;
 import java.util.*;
 
-
 public class Roomreader {
-    public static Map<Integer, String> readRooms(String filename) {
-        HashMap<Integer, Room> room = new HashMap<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("Map.txt"))) {
+
+    public static Map<Integer, Room> readRooms(String filename) {
+        Map<Integer, Room> roomMap = new HashMap<>(); // declare once here
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
+
             while ((line = br.readLine()) != null) {
-                if(line.startsWith("#") || line.trim().isEmpty()) continue;
+                line = line.trim();
+
+                if (line.isEmpty() || line.startsWith("#")) continue;
+
                 String[] parts = line.split("\\|");
-                if (parts.length < 7){
+                if (parts.length < 7) {
                     System.out.println("Invalid room data: " + line);
                     continue;
                 }
+
                 int id = Integer.parseInt(parts[0].trim());
                 String name = parts[1].trim();
-                StringBuilder description = new StringBuilder();
-                for (int i = 2; i < parts.length - 4; i++){
-                    if (i > 2) description.append(",");
-                    description.append(parts[i].trim());
-                }
-                String desc = description.toString().trim();
-                int n = Integer.parseInt(parts[parts.length - 4].trim());
-                int e = Integer.parseInt(parts[parts.length - 3].trim());
-                int s = Integer.parseInt(parts[parts.length - 2].trim());
-                int w = Integer.parseInt(parts[parts.length - 1].trim());
+                String description = parts[2].trim();
 
-                room.put(id, new Room(id,name,desc,n,e,s,w));
+                int north = Integer.parseInt(parts[3].trim());
+                int east  = Integer.parseInt(parts[4].trim());
+                int south = Integer.parseInt(parts[5].trim());
+                int west  = Integer.parseInt(parts[6].trim());
+
+                Room room = new Room(id, name, description); // only declare once
+
+                if (north > 0) room.addExit("NORTH", north);
+                if (east  > 0) room.addExit("EAST", east);
+                if (south > 0) room.addExit("SOUTH", south);
+                if (west  > 0) room.addExit("WEST", west);
+
+                roomMap.put(id, room); // add room to map
             }
         } catch (IOException e) {
-            System.out.println("Error reading file: " + e.getMessage());
-        } catch (NumberFormatException e) {
-            System.out.println("Error parsing number: " + e.getMessage());
+            System.out.println("Error reading rooms from file: " + e.getMessage());
         }
-        return null;
+
+        return roomMap; // return the map
     }
 }
-
-
