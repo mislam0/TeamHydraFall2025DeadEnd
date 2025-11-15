@@ -1,2 +1,8 @@
-# name|description|answer|attempts|roomID
-Riddle of the Oak|I have roots that no one sees, I am taller than trees. Up, up I go, but I never grow.|mountain|5|2
+# ID|name|description|answer|hint|attempts|roomID|ItemID
+PZ1|First Beginnings| A grim face appears on the cell wall asking you a riddle. What is also a "Cell" and takes people time each and everyday?|Cell Phone|What is a device you use everyday|3|3|DM7
+PZ2|Think your way out|Three levers line the wall with numbers under each in the order 1-2-3. A on a table reads "Enter the correct sequence of levers to procced"?|2-1-3|-|3|5|DM1
+PZ3|Grand Altar| A shimmering Altar lays empty in the middle of the room. It seems you need to place a certain item in the middle of it to proceed.|Scale Fragment,Spirit Essence|-|3|6|DM6
+PZ4|Guiding Gate| A Gate stands before you. Use the key that guards you from the remaining secrets.|Guardian Key|-|3|11|-
+PZ5|Decode the Truth| A scroll lays before you reading "tsaE tsaE htroN". Under it reads decode this cipher to find your way to your next opponent.|North East East|Try reading the cipher backwards|3|17|-
+PZ6|Runic Tiles| Tiles with symbols all around line the walls. A mysterious voice echoes saying "Put each tile in the correct place to proceed"|1-Tile2,2-Tile3,3-Tile1,4-Tile4|-|3|18|DM3
+PZ7|Dialing up the Pressure| Two statues lay resting on two pillars. Maybe you are supposed to set each statue a certain way?|Statue1-North,Statue2-South|-|3|25|DM4
