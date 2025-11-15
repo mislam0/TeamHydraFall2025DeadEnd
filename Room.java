@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +8,10 @@ public class Room {
     private String description;
     private boolean visited;
     private Map<String, Integer> exits;
+
+    private ArrayList<Item> items = new ArrayList<>();
+    private Monster monster;
+
 
     // Constructor
     public Room(int id, String name, String description) {
@@ -29,4 +34,28 @@ public class Room {
     public void addExit(String direction, int roomNumber) { exits.put(direction.toUpperCase(), roomNumber); }
     public Map<String, Integer> getExits() { return exits; }
     public Integer getExit(String direction) { return exits.get(direction.toUpperCase()); }
+    public ArrayList<Item> getItems() { return items; }
+
+    public void addItem(Item item) {
+        items.add(item);
+    }
+
+    public Item removeItem(String name) {
+        for (Item item : items) {
+            if (item.getName().equalsIgnoreCase(name)) {
+                items.remove(item);
+                return item;
+            }
+        }
+        return null;
+    }
+    
+
+
+    public boolean hasMonster() { return monster != null && monster.isAlive(); }
+    public Monster getMonster() { return monster; }
+    public void setMonster(Monster m) { monster = m; }
+    public void removeMonster() { monster = null; }
 }
+
+    
