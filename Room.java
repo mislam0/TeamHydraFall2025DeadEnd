@@ -40,12 +40,11 @@ public class Room {
         items.add(item);
     }
 
-    public Item removeItem(String name) {
-        for (Item item : items) {
-            if (item.getName().equalsIgnoreCase(name)) {
-                items.remove(item);
-                return item;
-            }
+    public void removeItem(Item item) { items.remove(item); }
+
+    public Item getItemByName(String name) {
+        for (Item i : items) {
+            if (i.getName().equalsIgnoreCase(name)) return i;
         }
         return null;
     }

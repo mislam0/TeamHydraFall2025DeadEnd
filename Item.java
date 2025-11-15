@@ -1,16 +1,22 @@
+import java.util.ArrayList;
+
 public class Item {
     private String id;
     private String name;
     private String description;
     private final String type; // "consumable" or "weapon"
     
-    private final int hp;
+    private final int healing;
     private final int damage;
     private final double armor;
     private final String dice;
     private final String rarity;
 
 
+
+
+
+    
 
     
 
@@ -19,7 +25,7 @@ public class Item {
         this.name = name;
         this.description = description;
         this.type = type;
-        this.hp = hp;
+        this.healing = hp;
         this.damage = damage;
         this.armor = armor;
         this.dice = dice;
@@ -43,8 +49,8 @@ public class Item {
         return type;
     }
 
-    public int getHp() {
-        return hp;
+    public int getHealing() {
+        return healing;
     }
 
     public int getDamage() {
@@ -63,7 +69,9 @@ public class Item {
         return rarity;
     }
 
-    
-     public boolean isConsumable() { return "consumable".equalsIgnoreCase(type); }
+
+
+     public boolean isConsumable() { return "health".equalsIgnoreCase(type) && healing > 0; }
     public boolean isWeapon() { return "weapon".equalsIgnoreCase(type); }
+    public boolean isEquipable() { return isWeapon() || "defense".equalsIgnoreCase(type); }
 }

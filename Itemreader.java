@@ -2,12 +2,14 @@ import java.io.*;
 import java.util.*;
 
 public class Itemreader {
+    
+    
 
     public static void loadItems(String filename, Map<Integer, Room> roomMap) {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if (line.startsWith("#") || line.isEmpty()) continue;
+                if (line.startsWith("#") || line.isEmpty()) continue; // Skip comments and empty lines
                 String[] parts = line.split("\\|");
                 String itemID = parts[0].trim();
                 String name = parts[1].trim();
@@ -20,8 +22,11 @@ public class Itemreader {
                 String rarity = parts[8].trim();
                 int roomId = parseIntSafe(parts[9].trim());
 
+                Item item =new Item(itemID,name, desc, type, hp, damage, armor, dice, rarity);
+                
+
                 Room room = roomMap.get(roomId);
-                if (room != null) room.addItem(new Item(itemID,name, desc, type, hp, damage, armor, dice, rarity));
+                if (room != null || roomId != 0) room.addItem(item);
                 System.out.println("Properly loaded item: " + name + " into room ID: " + roomId);
             }
         } catch (Exception e) {
