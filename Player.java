@@ -22,7 +22,8 @@ public class Player {
         this.isInCombat = false;
 
     }
-     // Movement
+
+    // Movement
     public Room move(String direction, Map<Integer, Room> roomMap) {
         Room currentRoom = roomMap.get(currentRoomNumber);
         Integer nextRoomNumber = currentRoom.getExit(direction.toUpperCase());
@@ -49,29 +50,91 @@ public class Player {
     public boolean hasVisited(int roomNumber) {
         return visitedRooms.contains(roomNumber);
     }
-     // Enter a room
-public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
-    if (room == null) {
-        System.out.println("Error: Room does not exist.");
-        return;
-    }
 
-    // Print description if first visit
-    if (!room.isVisited()) {
-        System.out.println("\nYou have arrived at " + room.getName() + "... " + room.getDescription());
-        room.visit();
-    } else {
-        System.out.println("\nYou have returned to " + room.getName() + ".");
-    }
+    // Enter Room 
+    public void enterRoom(Room room, Scanner scanner) {
+        if (!room.isVisited()) {
+            System.out.println("\nYou have arrived at " + room.getName() + "... " + room.getDescription());
+            room.visit();
 
-    // Set current room number
-    setCurrentRoomNumber(room.getId());
+            // Puzzle 1 hint
+            if (room.getId() == 3 && !room.isDoorPuzzleSolved()) {
+                System.out.println("You have found a riddle on a door, say \"Examine Door\" to read it, or \"Answer Door\" to answer the riddle.");
+            }
 
-    // Trigger combat if monster is present
-    if (room.hasMonster() && room.getMonster().isAlive()) {
-        handleCombat(room.getMonster(), scanner, roomMap);
+            // Puzzle 2 hint
+            if (room.getId() == 5 && !room.isLeverPuzzleSolved()) {
+                System.out.println("You see a lever, you can say \"Examine Panel\" to view lever labels and reset status,");
+                System.out.println("or \"Pull Lever\" to pull the lever in 3 sequences (1-5 each), or \"Reset Panel\" to reset the panel.");
+            }
+
+            // Puzzle 3 hint
+            if (room.getId() == 6 && !room.isAltarPuzzleSolved()) {
+                System.out.println("You see an Altar. It seems you can put down components into it.");
+                System.out.println("Type \"Check components\" to see which parts are missing on this altar.");
+                System.out.println("Type \"Place (item) on altar\" to place the item onto the altar.");
+                System.out.println("Type \"Craft key\" to craft the guardian key.");
+            }
+
+            // Puzzle 4: scroll / decipher
+            if (room.getId() == 11) {
+                System.out.println("There seems to be a scroll laying on the ground. Type \"Read scroll\" to read it.");
+            }
+            if (room.getId() == 12) {
+                System.out.println("You can see a deciphering tool.. Use it? Type \"Decipher (word)\" to decipher.");
+            }
+
+            // Tiles puzzle hint
+            if (room.getId() == 17 && !room.isTilesPuzzleSolved()) {
+                System.out.println("You see green birds, red turtles and blue marshmallows drawn on one side of the wall.");
+                System.out.println("You then see three colored tiles that can be moved around.. Say \"Move Tiles\" to start moving them.");
+            }
+
+            // Statues puzzle hint
+            if (room.getId() == 18 && !room.isStatuesPuzzleSolved()) {
+                System.out.println("You see three statues, they seem to be slightly aligned towards the entrance to this room,");
+                System.out.println("almost as if they're staring at you. Maybe you can move them..?");
+                System.out.println("Type \"Inspect statue\" to see the directions of the statue currently,");
+                System.out.println("or type \"Set statue direction\" to change the direction of the statues in order from left to right.");
+            }
+
+        } else {
+            System.out.println("\nYou have returned to " + room.getName() + ".");
+
+            // Puzzle 1 hint
+            if (room.getId() == 3 && !room.isDoorPuzzleSolved()) {
+                System.out.println("You have found a riddle on a door, say \"Examine Door\" to read it, or \"Answer Door\" to answer the riddle.");
+            }
+
+            // Puzzle 2 hint
+            if (room.getId() == 5 && !room.isLeverPuzzleSolved()) {
+                System.out.println("You see a lever, you can say \"Examine Panel\" to view lever labels and reset status,");
+                System.out.println("or \"Pull Lever\" to pull the lever in 3 sequences (1-5 each), or \"Reset Panel\" to reset the panel.");
+            }
+
+            // Puzzle 4: scroll / decipher – still remind on return
+            if (room.getId() == 11) {
+                System.out.println("There seems to be a scroll laying on the ground. Type \"Read scroll\" to read it.");
+            }
+            if (room.getId() == 12) {
+                System.out.println("You can see a deciphering tool.. Use it? Type \"Decipher (word)\" to decipher.");
+            }
+
+            // Tiles puzzle hint
+            if (room.getId() == 17 && !room.isTilesPuzzleSolved()) {
+                System.out.println("You see green birds, red turtles and blue marshmallows drawn on one side of the wall.");
+                System.out.println("You then see three colored tiles that can be moved around.. Say \"Move Tiles\" to start moving them.");
+            }
+
+            // Statues puzzle hint
+            if (room.getId() == 18 && !room.isStatuesPuzzleSolved()) {
+                System.out.println("You see three statues, they seem to be slightly aligned towards the entrance to this room,");
+                System.out.println("almost as if they're staring at you. Maybe you can move them..?");
+                System.out.println("Type \"Inspect statue\" to see the directions of the statue currently,");
+                System.out.println("or type \"Set statue direction\" to change the direction of the statues in order from left to right.");
+            }
+        }
     }
-}
 
     // Inventory Management
 
@@ -79,11 +142,9 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
         return inventory;
     }
 
-        public void pickUp(Item item) {
+    public void pickUp(Item item) {
         inventory.add(item);
     }
-
-
 
     public void drop(Item item) {
         inventory.remove(item);
@@ -91,15 +152,10 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
         if (item == equippedArmor) unequip(item);
     }
 
-
-
     public Item getItemByName(String name) {
         for (Item i : inventory) if (i.getName().equalsIgnoreCase(name)) return i;
         return null;
     }
-
-
-
 
     // Equip / Unequip
     public void equip(Item item) {
@@ -111,12 +167,7 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
             equippedArmor = item;
             System.out.println(item.getName() + " equipped. Defense increased." + defense());
 
-
-
-
-
-        }
-    else {
+        } else {
             System.out.println("Cannot equip this item.");
         }
     }
@@ -169,8 +220,6 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
         }
     }
 
-
-
     // Stats
     public int getHp() {
         return hp;
@@ -220,169 +269,20 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
     }
 
     // Take Damage
-     public void takeDamage(int damage) {
+    public void takeDamage(int damage) {
         hp -= damage ;
         if (hp < 0) hp = 0;
     }
-    public boolean isInCombat() {
-        return isInCombat;
-    }
-    public void setInCombat(boolean inCombat) {
-        isInCombat = inCombat;
-    }
 
-    private void handlePlayerDeath(){
-        System.out.println("You have been defeated. Game Over.");
-        
-        System.exit(0);
-    }
 
-    //combat methods
-    // Combat method
-public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> roomMap) {
-    if (monster == null || !monster.isAlive()) {
-        System.out.println("No monster to fight here.");
-        return;
-    }
 
-    System.out.println("You are in combat with " + monster.getName() + "!");
-    setInCombat(true);
 
-    Dice dice = new Dice();
 
-    while (isInCombat && monster.isAlive() && isAlive()) {
-        Room currentRoom = roomMap.get(currentRoomNumber);
-        if (currentRoom == null) {
-            System.out.println("Error: Current room not found.");
-            setInCombat(false);
-            return;
-        }
 
-        System.out.println("\n" + monster.getName() + " HP: " + monster.getHitPoints());
-        System.out.println("Your HP: " + getHp());
 
-        System.out.println("\nWhat would you like to do?");
-        System.out.println("1. Attack");
-        System.out.println("2. Heal");
-        System.out.println("3. Escape");
-        System.out.println("4. Analyze Monster");
 
-        String choice = scanner.nextLine().trim().toUpperCase();
 
-        switch (choice) {
-            case "1":
-case "ATTACK":
-    int playerDamage = attackDamageWithDice();
-    if (playerDamage <= 0) {
-        System.out.println("You strike but deal no damage.");
-    } else {
-        monster.takeDamage(playerDamage);
-        System.out.println("You deal " + playerDamage + " damage!");
-    }
 
-    if (monster.isAlive()) {
-        // Monster attacks back
-        int monsterDamage = Math.max(0, monster.getDamage() - defense());
-        takeDamage(monsterDamage);
-        System.out.println(monster.getName() + " hits you for " + monsterDamage + " damage!");
-        if (!isAlive()) {
-            handlePlayerDeath();
-            return; // exit game
-        }
-    } else {
-        System.out.println("You have defeated " + monster.getName() + "!");
-        Item drop = monster.getDropItem();
-        if (drop != null) {
-            inventory.add(drop);
-            System.out.println(monster.getName() + " dropped " + drop.getName() + "!");
-        }
-        if (monster.getType().equalsIgnoreCase("Boss")) {
-            System.out.println("Congratulations! You have defeated the Boss and completed the game!");
-            System.exit(0);
-        }
-        // Only set combat false here
-        setInCombat(false);
-    }
-    break;
-            case "2":
-            case "HEAL":
-                System.out.print("Enter healing item name: ");
-                String itemName = scanner.nextLine().trim();
-                Item healItem = getItemByName(itemName);
-                if (healItem != null) {
-                    heal(healItem);
-                } else {
-                    System.out.println("Item not in inventory or doesn't exist.");
-                }
 
-                // Monster attacks after healing
-                if (monster.isAlive()) {
-                    int monsterDamage = Math.max(0, monster.getDamage() - defense());
-                    takeDamage(monsterDamage);
-                    System.out.println(monster.getName() + " hits you for " + monsterDamage + " damage!");
-                    if (!isAlive()) {
-                        setInCombat(false);
-                        handlePlayerDeath();
-                        return;
-                    }
-                }
-                break;
 
-            case "3":
-            case "escape":
-                boolean escaped = (dice.dX(2) == 1); // 50% chance
-                if (escaped) {
-                    System.out.println("You managed to escape!");
-                    setInCombat(false);
-
-                    Map<String, Integer> exits = currentRoom.getExits();
-                    List<String> validDirs = new ArrayList<>();
-                    for (Map.Entry<String, Integer> entry : exits.entrySet()) {
-                        if (entry.getValue() != null && entry.getValue() > 0) {
-                            validDirs.add(entry.getKey());
-                        }
-                    }
-
-                    if (!validDirs.isEmpty()) {
-                        int roll = dice.dX(validDirs.size());
-                        String chosenDir = validDirs.get(roll - 1);
-                        Room next = move(chosenDir, roomMap);
-                        if (next != null) {
-                            System.out.println("You run " + chosenDir + " to " + next.getName() + ".");
-                        } else {
-                            System.out.println("You couldn't find a way out and remain in the same room.");
-                        }
-                    } else {
-                        System.out.println("No exits to run through — you remain in place.");
-                    }
-
-                } else {
-                    System.out.println("Failed to escape!");
-                    int monsterDamage = Math.max(0, monster.getDamage() - defense());
-                    takeDamage(monsterDamage);
-                    System.out.println(monster.getName() + " hits you for " + monsterDamage + " damage!");
-                    if (!isAlive()) {
-                        setInCombat(false);
-                        handlePlayerDeath();
-                        return;
-                    }
-                }
-                break;
-
-            case "4":
-            case "ANALYZE":
-                System.out.println("Monster: " + monster.getName());
-                System.out.println("Description: " + monster.getDescription());
-                System.out.println("Type: " + monster.getType());
-                System.out.println("HP: " + monster.getHitPoints());
-                System.out.println("Damage: " + monster.getDamage());
-               
-                break;
-
-            default:
-                System.out.println("Invalid choice. Please select a valid action.");
-               } 
-        }
-    }
 }
-
