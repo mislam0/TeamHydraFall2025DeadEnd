@@ -23,6 +23,11 @@ public class Room {
     private int leverSeq3 = 0;
     private int leverResetCount = 0;
 
+    // Added for altar puzzle
+    private boolean altarPuzzleSolved = false;
+    private boolean altarDM1Placed = false;
+    private boolean altarDM4Placed = false;
+
     // Constructor
     public Room(int id, String name, String description) {
         this.id = id;
@@ -108,5 +113,25 @@ public class Room {
         leverSeq2 = 0;
         leverSeq3 = 0;
         leverResetCount++;
+    }
+
+    // Altar puzzle
+    public boolean isAltarPuzzleSolved() {
+        return altarPuzzleSolved;
+    }
+
+    public void setAltarPuzzleSolved(boolean solved) {
+        this.altarPuzzleSolved = solved;
+    }
+
+    public boolean isDM1Placed() { return altarDM1Placed; }
+    public boolean isDM4Placed() { return altarDM4Placed; }
+
+    public void setDM1Placed(boolean b) { altarDM1Placed = b; }
+    public void setDM4Placed(boolean b) { altarDM4Placed = b; }
+
+    public void resetAltar() {
+        altarDM1Placed = false;
+        altarDM4Placed = false;
     }
 }

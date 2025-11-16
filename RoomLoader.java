@@ -124,7 +124,8 @@ public class RoomLoader {
                         } else {
                             System.out.println("There is no door to examine.");
                         }
-                    } else if (argument.equalsIgnoreCase("panel")) {
+                    } 
+                    else if (argument.equalsIgnoreCase("panel")) {
                         if (current.getId() == 5) {
                             if (current.getLeverSeq1() == 0 &&
                                 current.getLeverSeq2() == 0 &&
@@ -141,8 +142,33 @@ public class RoomLoader {
                         } else {
                             System.out.println("There is no panel to examine.");
                         }
-                    } else {
+                    } 
+                    else {
                         System.out.println("Examine what?");
+                    }
+                    break;
+
+                case "CHECK":
+                    if (argument.equalsIgnoreCase("components")) {
+
+                        if (current.getId() == 6) {
+
+                            if (!current.isDM1Placed() && !current.isDM4Placed()) {
+                                System.out.println("Scale Fragment and Spirit Essence are both missing.");
+                            } else if (current.isDM1Placed() && !current.isDM4Placed()) {
+                                System.out.println("Only Spirit Essence is missing.");
+                            } else if (!current.isDM1Placed() && current.isDM4Placed()) {
+                                System.out.println("Only Scale Fragment is missing.");
+                            } else {
+                                System.out.println("All components are placed.");
+                            }
+
+                        } else {
+                            System.out.println("There is nothing to check here.");
+                        }
+
+                    } else {
+                        System.out.println("Check what?");
                     }
                     break;
 
@@ -227,8 +253,77 @@ public class RoomLoader {
                         } else {
                             System.out.println("There is no panel to reset.");
                         }
-                    } else {
+                    } 
+                    else {
                         System.out.println("Reset what?");
+                    }
+                    break;
+
+                // Altar puzzle: place (item) on altar
+                case "PLACE":
+                    if (argument.toLowerCase().endsWith("on altar")) {
+
+                        if (current.getId() != 6) {
+                            System.out.println("There is no altar here.");
+                            break;
+                        }
+                        if (current.isAltarPuzzleSolved()) {
+                            System.out.println("The altar has already been used.");
+                            break;
+                        }
+
+                        String itemName = argument.substring(0, argument.length() - 9).trim(); // remove "on altar"
+                        Item itemToPlace = player.getItemByName(itemName);
+
+                        if (itemToPlace == null) {
+                            System.out.println("You don't have that item.");
+                            break;
+                        }
+
+                        if (itemToPlace.getId().equals("DM1")) {
+                            current.setDM1Placed(true);
+                            player.getInventory().remove(itemToPlace);
+                            System.out.println("You placed the Scale Fragment onto the altar.");
+                        } 
+                        else if (itemToPlace.getId().equals("DM4")) {
+                            current.setDM4Placed(true);
+                            player.getInventory().remove(itemToPlace);
+                            System.out.println("You placed the Spirit Essence onto the altar.");
+                        } 
+                        else {
+                            System.out.println("This item does not fit into the altar.");
+                        }
+
+                    } else {
+                        System.out.println("Place what?");
+                    }
+                    break;
+
+                // Altar puzzle: craft key
+                case "CRAFT":
+                    if (argument.equalsIgnoreCase("key")) {
+                        if (current.getId() == 6) {
+
+                            if (current.isDM1Placed() && current.isDM4Placed()) {
+
+                                Item crafted = itemMap.get("DM6"); // Guardian Key
+                                if (crafted != null) {
+                                    player.pickUp(crafted);
+                                    System.out.println("You crafted the Guardian Key!");
+                                }
+
+                                current.setAltarPuzzleSolved(true);
+
+                            } else {
+                                System.out.println("You cannot craft the key yet.");
+                            }
+
+                        } else {
+                            System.out.println("There is no altar here.");
+                        }
+                    } 
+                    else {
+                        System.out.println("Craft what?");
                     }
                     break;
 

@@ -54,26 +54,34 @@ public class Player {
             System.out.println("\nYou have arrived at " + room.getName() + "... " + room.getDescription());
             room.visit();
 
-            // Puzzle 1 hint (room 3)
+            // Puzzle 1 hint
             if (room.getId() == 3 && !room.isDoorPuzzleSolved()) {
                 System.out.println("You have found a riddle on a door, say \"Examine Door\" to read it, or \"Answer Door\" to answer the riddle.");
             }
 
-            // Puzzle 2 hint (room 5)
+            // Puzzle 2 hint
             if (room.getId() == 5 && !room.isLeverPuzzleSolved()) {
                 System.out.println("You see a lever, you can say \"Examine Panel\" to view lever labels and reset status,");
                 System.out.println("or \"Pull Lever\" to pull the lever in 3 sequences (1-5 each), or \"Reset Panel\" to reset the panel.");
             }
 
+            // Puzzle 3 hint
+            if (room.getId() == 6 && !room.isAltarPuzzleSolved()) {
+                System.out.println("You see an Altar. It seems you can put down components into it.");
+                System.out.println("Type \"Check components\" to see which parts are missing on this altar.");
+                System.out.println("Type \"Place (item) on altar\" to place the item onto the altar.");
+                System.out.println("Type \"Craft key\" to craft the guardian key.");
+            }
+
         } else {
             System.out.println("\nYou have returned to " + room.getName() + ".");
 
-            // Puzzle 1 hint (room 3)
+            // Puzzle 1 hint
             if (room.getId() == 3 && !room.isDoorPuzzleSolved()) {
                 System.out.println("You have found a riddle on a door, say \"Examine Door\" to read it, or \"Answer Door\" to answer the riddle.");
             }
 
-            // Puzzle 2 hint (room 5)
+            // Puzzle 2 hint
             if (room.getId() == 5 && !room.isLeverPuzzleSolved()) {
                 System.out.println("You see a lever, you can say \"Examine Panel\" to view lever labels and reset status,");
                 System.out.println("or \"Pull Lever\" to pull the lever in 3 sequences (1-5 each), or \"Reset Panel\" to reset the panel.");
