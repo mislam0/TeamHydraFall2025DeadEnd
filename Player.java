@@ -8,6 +8,7 @@ public class Player {
     private Item equippedWeapon;
     private Item equippedArmor;
     private int baseAttackDamage;
+    private int baseDefense;
    
     public Player(){
         this.currentRoomNumber = 1;
@@ -15,6 +16,7 @@ public class Player {
         this.visitedRooms.add(currentRoomNumber);
         this.hp = 100;
         this.baseAttackDamage = 0;
+        this.baseDefense = 0;
         this.inventory = new ArrayList<>();
         this.equippedWeapon = null;
         this.equippedArmor = null;
@@ -129,6 +131,7 @@ public class Player {
         }
     }
 
+    // Help Command
     public void help() {
         System.out.println(
         "Available commands:\n"+
@@ -139,16 +142,20 @@ public class Player {
         "> INSPECT <item>: shows item description, \n" + 
         "> EQUIP <item>: equips an item, \n" +
         "> UNEQUIP <item>: unequips an item, \n" +
-        "> HEAL <item>: uses a healing item, \n" +
+        "> USE <item>: uses a healing item, \n" +
         "> INVENTORY: lists items in inventory, \n" +
         "> STATUS: shows player status, \n" +
         "> QUIT: exits the game.");
     }
 
+    // Status Command
     public void printStatus() {
         System.out.println("Player HP: " + hp);
         if (equippedWeapon != null) {
-            System.out.println("Equipped Item: " + equippedWeapon.getName() + " (Damage: " + equippedWeapon.getDamage() + ")");
+            System.out.println("Equipped Weapon: " + equippedWeapon.getName() + " (Damage: " + equippedWeapon.getDamage() + ")");
+        } 
+        if (equippedArmor != null) {
+            System.out.println("Equipped Armor: " + equippedArmor.getName() + " (Defense: " + equippedArmor.getArmor() + ")");
         } else {
             System.out.println("No item equipped.");
         }
@@ -165,8 +172,8 @@ public class Player {
         return equippedWeapon != null ? equippedWeapon.getDamage() : baseAttackDamage;
     }
 
-    public int defense() {
-        return equippedArmor != null ? (int) equippedArmor.getArmor() : 0;
+    public double defense() {
+        return equippedArmor != null ? (double) equippedArmor.getArmor() : baseDefense;
     }
 
     public boolean isAlive() {

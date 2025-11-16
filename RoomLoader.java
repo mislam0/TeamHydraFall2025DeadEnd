@@ -92,7 +92,7 @@ public class RoomLoader {
                     else System.out.println("Item not in inventory.");
                     break;
 
-                    case "HEAL":
+                    case "USE":
                     Item healItem = player.getItemByName(argument);
                     if (healItem != null) player.heal(healItem);
                     else System.out.println("Item not in inventory or cannot heal.");
