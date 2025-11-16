@@ -46,17 +46,27 @@ public class Player {
     public boolean hasVisited(int roomNumber) {
         return visitedRooms.contains(roomNumber);
     }
-     // Enter Room 
-        public void enterRoom(Room room, Scanner scanner) {
-            if (!room.isVisited()) {
-                System.out.println("\nYou have arrived at " + room.getName() + "... " + room.getDescription());
-                room.visit();
-            } else {
-                System.out.println("\nYou have returned to " + room.getName() + ".");
-            }
-    
 
+     // Enter Room 
+    public void enterRoom(Room room, Scanner scanner) {
+    if (!room.isVisited()) {
+        System.out.println("\nYou have arrived at " + room.getName() + "... " + room.getDescription());
+        room.visit();
+
+        // Puzzle hint
+        if (room.getId() == 3 && !room.isDoorPuzzleSolved()) {
+            System.out.println("You have found a riddle on a door, say \"Examine Door\" to read it, or \"Answer Door\" to answer the riddle.");
         }
+        
+        } else {
+            System.out.println("\nYou have returned to " + room.getName() + ".");
+        // Puzzle hint
+            if (room.getId() == 3 && !room.isDoorPuzzleSolved()) {
+            System.out.println("You have found a riddle on a door, say \"Examine Door\" to read it, or \"Answer Door\" to answer the riddle.");
+        }
+    }
+}
+
 
     // Inventory Management
 

@@ -12,13 +12,15 @@ public class Room {
     private ArrayList<Item> items = new ArrayList<>();
     private Monster monster;
 
+    // Added for puzzle
+    private boolean doorPuzzleSolved = false;
 
     // Constructor
     public Room(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-    
+
         this.exits = new HashMap<>();
     }
 
@@ -48,13 +50,18 @@ public class Room {
         }
         return null;
     }
-    
-
 
     public boolean hasMonster() { return monster != null && monster.isAlive(); }
     public Monster getMonster() { return monster; }
     public void setMonster(Monster m) { monster = m; }
     public void removeMonster() { monster = null; }
-}
 
-    
+    // Added this for puzzle
+    public boolean isDoorPuzzleSolved() {
+        return doorPuzzleSolved;
+    }
+
+    public void setDoorPuzzleSolved(boolean solved) {
+        this.doorPuzzleSolved = solved;
+    }
+}

@@ -4,11 +4,16 @@ public class RoomLoader {
     private List<Room> rooms;
     private Map<Integer, Room> roomMap;
     private Player player;
-    
+
+    // *** ADDED FOR PUZZLE ITEM REWARD ***
+    private Map<String, Item> itemMap;
 
     public RoomLoader() {
         roomMap = Roomreader.readRooms("Map.txt");
-        Map<String, Item> itemMap = Itemreader.loadItems("Items.txt", roomMap);
+
+        // *** CHANGED to store globally ***
+        itemMap = Itemreader.loadItems("Items.txt", roomMap);
+
         MonsterReader.loadMonsters("Monsters.txt", roomMap, itemMap);
 
         rooms = new ArrayList<>(roomMap.values());
@@ -51,12 +56,12 @@ public class RoomLoader {
                     }
                     break;
 
-                    case "EXPLORE":
+                case "EXPLORE":
                     if (current.getItems().isEmpty()) System.out.println("No items here.");
                     else current.getItems().forEach(i -> System.out.println("- " + i.getName()));
                     break;
 
-                    case "PICKUP":
+                case "PICKUP":
                     Item toPick = current.getItemByName(argument);
                     if (toPick != null) {
                         player.pickUp(toPick);
@@ -65,7 +70,7 @@ public class RoomLoader {
                     } else System.out.println("Item not found.");
                     break;
 
-                    case "DROP":
+                case "DROP":
                     Item toDrop = player.getItemByName(argument);
                     if (toDrop != null) {
                         player.drop(toDrop);
@@ -73,8 +78,8 @@ public class RoomLoader {
                         System.out.println("Dropped " + toDrop.getName());
                     } else System.out.println("Item not in inventory.");
                     break;
-                    
-                    case "INSPECT":
+
+                case "INSPECT":
                     Item toInspect = player.getItemByName(argument);
                     if (toInspect != null) System.out.println(toInspect.getDescription());
                     else System.out.println("Item not in inventory.");
@@ -92,24 +97,66 @@ public class RoomLoader {
                     else System.out.println("Item not in inventory.");
                     break;
 
-                    case "HEAL":
+                case "HEAL":
                     Item healItem = player.getItemByName(argument);
                     if (healItem != null) player.heal(healItem);
                     else System.out.println("Item not in inventory or cannot heal.");
                     break;
 
-
-                    case "INVENTORY":
+                case "INVENTORY":
                     if (player.getInventory().isEmpty()) System.out.println("No items in inventory.");
                     else player.getInventory().forEach(i -> System.out.println("- " + i.getName()));
                     break;
 
-                    case "HELP":
+                case "HELP":
                     player.help();
                     break;
 
-                    case "STATUS":
+                case "STATUS":
                     player.printStatus();
+                    break;
+
+                // Examine door command for door puzzle
+                case "EXAMINE":
+                    if (argument.equalsIgnoreCase("door")) {
+                        if (current.getId() == 3 && !current.isDoorPuzzleSolved()) {
+                            System.out.println("RIDDLE: What has to be broken before you can use it?");
+                        } else {
+                            System.out.println("There is no door to examine.");
+                        }
+                    } else {
+                        System.out.println("Examine what?");
+                    }
+                    break;
+
+                // *** PUZZLE COMMAND: ANSWER DOOR ***
+                case "ANSWER":
+                    if (argument.equalsIgnoreCase("door")) {
+                        if (current.getId() == 3 && !current.isDoorPuzzleSolved()) {
+
+                            System.out.print("Your answer: ");
+                            String ans = scanner.nextLine().trim().toLowerCase();
+
+                            if (ans.equals("egg")) {
+                                System.out.println("The lock clicks open.");
+                                current.setDoorPuzzleSolved(true);
+
+                                // Getting that item for this puzzle
+                                Item reward = itemMap.get("DM7");
+                                if (reward != null) {
+                                    player.pickUp(reward);
+                                    System.out.println("You obtained: " + reward.getName() + "!");
+                                }
+
+                            } else {
+                                System.out.println("Incorrect answer.");
+                            }
+                        } else {
+                            System.out.println("Nothing to answer here.");
+                        }
+                    } else {
+                        System.out.println("Answer what?");
+                    }
                     break;
 
                 case "QUIT":
