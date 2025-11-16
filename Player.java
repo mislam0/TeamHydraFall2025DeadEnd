@@ -180,6 +180,14 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
         return equippedWeapon != null ? equippedWeapon.getDamage() : baseAttackDamage;
     }
 
+    public int attackDamageWithDice() {
+        if (equippedWeapon != null && equippedWeapon.getDice() != null) {
+            Dice dice = new Dice();
+            return dice.rollDice(equippedWeapon.getDice());
+        }
+        return baseAttackDamage ;
+    }
+
     public int defense() {
         return equippedArmor != null ? (int) equippedArmor.getArmor() : 0;
     }
@@ -241,7 +249,7 @@ public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> ro
         switch (choice) {
             case "1":
             case "ATTACK":
-                int playerDamage = attackDamage();
+                int playerDamage = attackDamageWithDice();
                 if (playerDamage <= 0) {
                     System.out.println("You strike but deal no damage.");
                 } else {
@@ -298,7 +306,7 @@ public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> ro
                 break;
 
             case "3":
-            case "ESCAPE":
+            case "escape":
                 boolean escaped = (dice.dX(2) == 1); // 50% chance
                 if (escaped) {
                     System.out.println("You managed to escape!");
@@ -345,6 +353,7 @@ public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> ro
                 System.out.println("Type: " + monster.getType());
                 System.out.println("HP: " + monster.getHitPoints());
                 System.out.println("Damage: " + monster.getDamage());
+               
                 break;
 
             default:

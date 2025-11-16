@@ -34,4 +34,32 @@ public class Dice {
     public int dX(int n) {
     return roll(n); // uses your existing generic roll method
 }
+
+public int rollDice(String notation) {
+    notation = notation.toLowerCase().trim();
+
+    // handle formats like "d6"
+    if (notation.startsWith("d")) {
+        int sides = Integer.parseInt(notation.substring(1));
+        return roll(sides);
+    }
+
+    // handle formats like "2d6"
+    if (notation.contains("d")) {
+        String[] parts = notation.split("d");
+        int num = Integer.parseInt(parts[0]);
+        int sides = Integer.parseInt(parts[1]);
+
+        int total = 0;
+        for (int i = 0; i < num; i++) {
+            total += roll(sides);
+        }
+        return total;
+    }
+
+    throw new IllegalArgumentException("Invalid dice notation: " + notation);
+}
+
+
+
 }

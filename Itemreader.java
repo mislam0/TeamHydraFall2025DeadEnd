@@ -40,7 +40,7 @@ public class Itemreader {
                     Room room = roomMap.get(roomId);
                     if (room != null) {
                         room.addItem(item);
-                        System.out.println("Loaded item: " + name + " into room ID " + roomId);
+                       
                     } else {
                         System.out.println("Item " + name + " has room ID " + roomId + " but no such room exists.");
                     }
