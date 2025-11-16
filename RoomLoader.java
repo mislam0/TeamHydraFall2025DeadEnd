@@ -2,7 +2,13 @@ import java.util.*;
 
 public class RoomLoader {
     private List<Room> rooms;
+<<<<<<< HEAD
+    private Map<Integer, Room> roomMap;
+    private Map<String, Item> itemMap;
+
+=======
     public Map<Integer, Room> roomMap;
+>>>>>>> 94f7c2d2e71ff7e61f42724a3fe7df2c3ef2abca
     private Player player;
 
     // *** For items, including puzzle rewards ***
@@ -11,11 +17,16 @@ public class RoomLoader {
     public RoomLoader() {
         roomMap = Roomreader.readRooms("Map.txt");
 
+<<<<<<< HEAD
+        Itemreader.loadItems("Items.txt", roomMap);
+        Monstereader.loadMonsters("Monsters.txt", roomMap, itemMap);
+=======
         // Store globally
         itemMap = Itemreader.loadItems("Items.txt", roomMap);
 
         MonsterReader.loadMonsters("Monsters.txt", roomMap, itemMap);
 
+>>>>>>> 94f7c2d2e71ff7e61f42724a3fe7df2c3ef2abca
         rooms = new ArrayList<>(roomMap.values());
     }
 
@@ -120,7 +131,11 @@ public class RoomLoader {
                     else System.out.println("Item not in inventory.");
                     break;
 
-                case "HEAL":
+<<<<<<< HEAD
+                    case "USE":
+=======
+                    case "HEAL":
+>>>>>>> 94f7c2d2e71ff7e61f42724a3fe7df2c3ef2abca
                     Item healItem = player.getItemByName(argument);
                     if (healItem != null) player.heal(healItem);
                     else System.out.println("Item not in inventory or cannot heal.");

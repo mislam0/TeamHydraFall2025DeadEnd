@@ -2,6 +2,8 @@ import java.io.*;
 import java.util.*;
 
 public class Itemreader {
+    
+    
 
     // Now returns a map of item ID -> Item for use by MonsterReader
     public static Map<String, Item> loadItems(String filename, Map<Integer, Room> roomMap) {
@@ -10,9 +12,7 @@ public class Itemreader {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty() || line.startsWith("#")) continue;
-
+                if (line.startsWith("#") || line.isEmpty()) continue; // Skip comments and empty lines
                 String[] parts = line.split("\\|");
                 if (parts.length < 10) {
                     System.out.println("Skipping malformed item line: " + line);
