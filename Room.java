@@ -8,9 +8,9 @@ public class Room {
     private String description;
     private boolean visited;
     private Map<String, Integer> exits;
-    private Monster monster;
 
     private ArrayList<Item> items = new ArrayList<>();
+    private Monster monster;
 
 
     // Constructor
@@ -18,7 +18,7 @@ public class Room {
         this.id = id;
         this.name = name;
         this.description = description;
-
+    
         this.exits = new HashMap<>();
     }
 
@@ -29,8 +29,6 @@ public class Room {
     public boolean isVisited() { return visited; }
     public void setVisited(boolean visited) { this.visited = visited; }
     public void visit() { this.visited = true; }
-    public Monster getMonster() { return monster; }
-    public void setMonster(Monster monster) { this.monster = monster; }
 
     // Exits
     public void addExit(String direction, int roomNumber) { exits.put(direction.toUpperCase(), roomNumber); }
@@ -42,13 +40,21 @@ public class Room {
         items.add(item);
     }
 
-    public Item removeItem(String name) {
-        for (Item item : items) {
-            if (item.getName().equalsIgnoreCase(name)) {
-                items.remove(item);
-                return item;
-            }
+    public void removeItem(Item item) { items.remove(item); }
+
+    public Item getItemByName(String name) {
+        for (Item i : items) {
+            if (i.getName().equalsIgnoreCase(name)) return i;
         }
         return null;
     }
+    
+
+
+    public boolean hasMonster() { return monster != null && monster.isAlive(); }
+    public Monster getMonster() { return monster; }
+    public void setMonster(Monster m) { monster = m; }
+    public void removeMonster() { monster = null; }
 }
+
+    
