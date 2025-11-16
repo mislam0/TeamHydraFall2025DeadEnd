@@ -76,6 +76,7 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
         return;
     }
 
+
     // Print description if first visit
     if (!room.isVisited()) {
         System.out.println("\nYou have arrived at " + room.getName() + "... " + room.getDescription());
@@ -87,8 +88,10 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
     // Set current room number
     setCurrentRoomNumber(room.getId());
 
+
     // Trigger combat if monster is present
-    if (room.hasMonster() && room.getMonster().isAlive()) {
+    if(room.hasMonster()) {
+        room.getMonster().spawnCheck();
         handleCombat(room.getMonster(), scanner, roomMap);
     }
 }
@@ -325,6 +328,10 @@ public int monsterAttackDamageWithDice(Monster monster) {
     //combat methods
     // Combat method
 public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> roomMap) {
+    
+
+
+    // Check if monster is null or dead
     if (monster == null || !monster.isAlive()) {
         System.out.println("No monster to fight here.");
         return;
@@ -509,7 +516,7 @@ public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> ro
             System.exit(0);
             
         }
-        if (currentRoom.getId() == 2 && !currentRoom.hasMonster()) {
+        if (currentRoom.getId() == 41 && !currentRoom.hasMonster()) {
             System.out.println("Freedom Ending");
             System.exit(0);
             

@@ -9,6 +9,7 @@ public class Monster {
     private Room room;
     private double spawnChance;
      // The room where the monster is located
+    final int initialHitPoints;
 
     // Constructor
     public Monster(String id, String name, String description, int hitPoints, int damage, String type, Item droppedItem) {
@@ -19,6 +20,7 @@ public class Monster {
         this.damage = damage;
         this.type = type;
         this.droppedItem = droppedItem;
+        this.initialHitPoints = hitPoints;
        
     }
 
@@ -27,11 +29,14 @@ public class Monster {
     public String getName() { return name; }
     public String getDescription() { return description; }
     public int getHitPoints() { return hitPoints; }
+    public void setHitPoints(int hitPoints) { this.hitPoints = hitPoints; }
     public int getDamage() { return damage; }
     public String getType() { return type; }
     public void setRoom(Room room) { this.room = room; }
     public Room getRoom() { return room; }
     public double getSpawnChance() { return spawnChance; }
+
+
 
     // Check if alive
     public boolean isAlive() { return hitPoints > 0; }
@@ -77,6 +82,18 @@ public class Monster {
                 return "d12"; // Boss monsters use two 12-sided dice
             default:
                 return "d4"; // Default to weak if unknown
+        }
+    }
+
+    // Set Monster as not alive if monster fails to spawn
+    public void spawnCheck() {
+        
+        double chance = spawnChance();
+        double roll = Math.random(); // Random number between 0.0 and 1.0
+        if (roll >= chance) {
+            hitPoints = 0; // Monster fails to spawn
+        } else {
+            hitPoints = initialHitPoints; // Monster spawns normally
         }
     }
 

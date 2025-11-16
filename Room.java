@@ -51,7 +51,7 @@ public class Room {
     
 
 
-    public boolean hasMonster() { return monster != null && monster.isAlive(); }
+    public boolean hasMonster() { return monster != null; }
     public Monster getMonster() { return monster; }
     public void setMonster(Monster m) { monster = m; }
     public void removeMonster() { monster = null; }
