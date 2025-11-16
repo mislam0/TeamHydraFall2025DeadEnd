@@ -178,16 +178,39 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
 
     public int attackDamage() {
         return equippedWeapon != null ? equippedWeapon.getDamage() : baseAttackDamage;
+
     }
 
     public int attackDamageWithDice() {
-        if (equippedWeapon != null && equippedWeapon.getDice() != null) {
-            Dice dice = new Dice();
-            return dice.rollDice(equippedWeapon.getDice());
+    Dice dice = new Dice();
+
+    if (equippedWeapon != null && equippedWeapon.isWeapon()) {
+        int base = equippedWeapon.getDamage();       // e.g., 15 for Guardian Sword
+        String diceType = equippedWeapon.getDice();  // e.g., "d12"
+        int diceRoll = 0;
+
+        if (diceType != null && !diceType.isEmpty()) {
+            switch(diceType.toLowerCase()) {
+                case "d2": diceRoll = dice.d2(); break;
+                case "d4": diceRoll = dice.d4(); break;
+                case "d6": diceRoll = dice.d8(); break;
+                case "d12": diceRoll = dice.d12(); break;
+            }
         }
-        return baseAttackDamage ;
+
+        int totalDamage = base + diceRoll;
+
+        if (diceRoll > 0) {
+            System.out.println("You swing " + equippedWeapon.getName() + " (rolled " + diceRoll + ") for " + totalDamage + " damage!");
+        } else {
+            System.out.println("You swing " + equippedWeapon.getName() + " for " + totalDamage + " damage!");
+        }
+
+        return totalDamage;
     }
 
+    return baseAttackDamage;
+}
     public int defense() {
         return equippedArmor != null ? (int) equippedArmor.getArmor() : 0;
     }
@@ -248,39 +271,39 @@ public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> ro
 
         switch (choice) {
             case "1":
-            case "ATTACK":
-                int playerDamage = attackDamageWithDice();
-                if (playerDamage <= 0) {
-                    System.out.println("You strike but deal no damage.");
-                } else {
-                    monster.takeDamage(playerDamage);
-                    System.out.println("You deal " + playerDamage + " damage!");
-                }
+case "ATTACK":
+    int playerDamage = attackDamageWithDice();
+    if (playerDamage <= 0) {
+        System.out.println("You strike but deal no damage.");
+    } else {
+        monster.takeDamage(playerDamage);
+        System.out.println("You deal " + playerDamage + " damage!");
+    }
 
-                if (monster.isAlive()) {
-                    int monsterDamage = Math.max(0, monster.getDamage() - defense());
-                    takeDamage(monsterDamage);
-                    System.out.println(monster.getName() + " hits you for " + monsterDamage + " damage!");
-                    if (!isAlive()) {
-                        setInCombat(false);
-                        handlePlayerDeath();
-                        return;
-                    }
-                } else {
-                    System.out.println("You have defeated " + monster.getName() + "!");
-                    setInCombat(false);
-                    Item drop = monster.getDropItem();
-                    if (drop != null) {
-                        inventory.add(drop);
-                        System.out.println(monster.getName() + " dropped " + drop.getName() + "!");
-                    }
-                    if (monster.getType().equalsIgnoreCase("Boss")) {
-                        System.out.println("Congratulations! You have defeated the Boss and completed the game!");
-                        System.exit(0);
-                    }
-                }
-                break;
-
+    if (monster.isAlive()) {
+        // Monster attacks back
+        int monsterDamage = Math.max(0, monster.getDamage() - defense());
+        takeDamage(monsterDamage);
+        System.out.println(monster.getName() + " hits you for " + monsterDamage + " damage!");
+        if (!isAlive()) {
+            handlePlayerDeath();
+            return; // exit game
+        }
+    } else {
+        System.out.println("You have defeated " + monster.getName() + "!");
+        Item drop = monster.getDropItem();
+        if (drop != null) {
+            inventory.add(drop);
+            System.out.println(monster.getName() + " dropped " + drop.getName() + "!");
+        }
+        if (monster.getType().equalsIgnoreCase("Boss")) {
+            System.out.println("Congratulations! You have defeated the Boss and completed the game!");
+            System.exit(0);
+        }
+        // Only set combat false here
+        setInCombat(false);
+    }
+    break;
             case "2":
             case "HEAL":
                 System.out.print("Enter healing item name: ");
@@ -358,7 +381,7 @@ public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> ro
 
             default:
                 System.out.println("Invalid choice. Please select a valid action.");
-               }   break;
+               } 
         }
     }
 }

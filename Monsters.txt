@@ -1,9 +1,10 @@
 # id|name|description|health|damage|type|drops|id
+M1|Dummy|Test Dummy...HIT EM!|0|999|Weak|DM2|2
 M1|Cave Crawler|A skittering insect-like creature that swarms in dark corners of the cave.|3|5|Weak|DM2|8
 M2|Rustfang Rat|A giant rat with glowing eyes and sharp, rust-colored teeth.|5|10|Weak|DM3|13
 M3|Mire Stalker|A lurking predator that blends into the wet cavern walls and strikes suddenly.|5|15|Regular|DM7|19
 M4|Echo Wraith|A ghostly form that feeds on fear, whispering in the shadows.|7|20|Regular|DM4|28
 M5|Stoneback Lizard|A heavily armored lizard that deflects weak strikes with its rocky scales.|9|25|Regular|DM1|33
 M6|Big Echo Wraith|A bigger ghostly form that feeds on fear, whispering in the shadows.|10|30|Regular|DM4|36
-M7|Abyssal Guardian|A towering armored monster that blocks the descent into deeper caverns. Its roar shakes the ground.|10|50|Boss|DM8|2
+M7|Abyssal Guardian|A towering armored monster that blocks the descent into deeper caverns. Its roar shakes the ground.|10|50|Boss|DM8|21
 M8|Leviathan Shade|A massive shadowy beast, said to be the spirit of the deep. It guards the final chamber of the Deep End.|15|100|Boss|DM5|40
