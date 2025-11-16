@@ -73,6 +73,14 @@ public class Player {
                 System.out.println("Type \"Craft key\" to craft the guardian key.");
             }
 
+            // Puzzle 4: scroll / decipher
+            if (room.getId() == 11) {
+                System.out.println("There seems to be a scroll laying on the ground. Type \"Read scroll\" to read it.");
+            }
+            if (room.getId() == 12) {
+                System.out.println("You can see a deciphering tool.. Use it? Type \"Decipher (word)\" to decipher.");
+            }
+
         } else {
             System.out.println("\nYou have returned to " + room.getName() + ".");
 
@@ -85,6 +93,14 @@ public class Player {
             if (room.getId() == 5 && !room.isLeverPuzzleSolved()) {
                 System.out.println("You see a lever, you can say \"Examine Panel\" to view lever labels and reset status,");
                 System.out.println("or \"Pull Lever\" to pull the lever in 3 sequences (1-5 each), or \"Reset Panel\" to reset the panel.");
+            }
+
+            // Puzzle 4: scroll / decipher – still remind on return
+            if (room.getId() == 11) {
+                System.out.println("There seems to be a scroll laying on the ground. Type \"Read scroll\" to read it.");
+            }
+            if (room.getId() == 12) {
+                System.out.println("You can see a deciphering tool.. Use it? Type \"Decipher (word)\" to decipher.");
             }
         }
     }

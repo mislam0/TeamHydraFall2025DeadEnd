@@ -269,7 +269,7 @@ public class RoomLoader {
                     }
                     break;
 
-                // Use guardian key
+                // Use guardian key (room 39 lock)
                 case "USE":
                     if (argument.equalsIgnoreCase("guardian key")) {
 
@@ -365,6 +365,35 @@ public class RoomLoader {
                     } 
                     else {
                         System.out.println("Craft what?");
+                    }
+                    break;
+
+                // Scroll / decipher puzzle
+                case "READ":
+                    if (argument.equalsIgnoreCase("scroll")) {
+                        if (current.getId() == 11) {
+                            System.out.println("The word to decode is \"blah\" for next room, find which it could be.");
+                        } else {
+                            System.out.println("There is no scroll to read here.");
+                        }
+                    } else {
+                        System.out.println("Read what?");
+                    }
+                    break;
+
+                case "DECIPHER":
+                    if (argument.equalsIgnoreCase("blah")) {
+                        if (current.getId() == 12) {
+                            System.out.println("Abyssal Guardian exists somewhere in your path.. I think..");
+                        } else {
+                            System.out.println("You don't see any deciphering tool here.");
+                        }
+                    } else {
+                        if (current.getId() == 12) {
+                            System.out.println("That doesn't seem to produce anything meaningful.");
+                        } else {
+                            System.out.println("You don't see any deciphering tool here.");
+                        }
                     }
                     break;
 
