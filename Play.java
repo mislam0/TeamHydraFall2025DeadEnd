@@ -13,8 +13,10 @@ public class Play {
 
         // Start the game
         loader.startGame(player, scanner);
-
+        
         // Close scanner after game ends
         scanner.close();
     }
+
+    
 }

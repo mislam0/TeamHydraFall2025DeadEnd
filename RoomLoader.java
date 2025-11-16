@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.*;
 
 public class RoomLoader {
@@ -143,6 +144,49 @@ public class RoomLoader {
 
                 case "STATUS":
                     player.printStatus();
+                    break;
+
+                case "SAVE":
+                    if (argument.isEmpty()) {
+                        System.out.println("Usage: SAVE <name>");
+                    } else {
+                        String saveName = argument;
+                        try {
+                            // Build monster registry from current rooms (keyed by monster name)
+                            Map<String, Monster> monstersById = buildMonsterMap();
+                            Map<String, String> state = GameSerializer.serialize(player, roomMap, itemMap, monstersById);
+                            SaveManager.save(saveName, state);
+                            System.out.println("Game saved as: " + saveName);
+                        } catch (IOException e) {
+                            System.err.println("Failed to save: " + e.getMessage());
+                        } catch (Exception e) {
+                            System.err.println("Unexpected error while saving: " + e.getMessage());
+                        }
+                    }
+                    break;
+
+                    case "LOAD":
+                    if (argument.isEmpty()) {
+                        System.out.println("Usage: LOAD <name>");
+                    } else {
+                        String loadName = argument;
+                        try {
+                            Map<String, String> loaded = SaveManager.load(loadName);
+                            // Build monster registry from current rooms (keys should be monster names or ids used earlier)
+                            Map<String, Monster> monstersById = buildMonsterMap();
+                            GameSerializer.deserialize(loaded, player, roomMap, itemMap, monstersById);
+                            System.out.println("Game loaded: " + loadName);
+                            // Refresh current room and re-enter to display updated state
+                            current = roomMap.get(player.getCurrentRoomNumber());
+                            if (current != null) {
+                                player.enterRoom(current, scanner, roomMap);
+                            }
+                        } catch (IOException e) {
+                            System.err.println("Failed to load: " + e.getMessage());
+                        } catch (Exception e) {
+                            System.err.println("Unexpected error while loading: " + e.getMessage());
+                        }
+                    }
                     break;
 
                 // Examine commands (door + panel)
@@ -538,5 +582,30 @@ public class RoomLoader {
         if (t.startsWith("s")) return "SOUTH";
         if (t.startsWith("w")) return "WEST";
         return t.toUpperCase();
+    }
+
+    private Map<String, Monster> buildMonsterMap() {
+        Map<String, Monster> out = new HashMap<>();
+        for (Room r : roomMap.values()) {
+            Monster m = r.getMonster();
+            if (m != null) {
+                try {
+                    // prefer id field if present via reflection
+                    java.lang.reflect.Field idF = Monster.class.getDeclaredField("id");
+                    idF.setAccessible(true);
+                    Object idVal = idF.get(m);
+                    if (idVal != null && !idVal.toString().isEmpty()) {
+                        out.put(idVal.toString(), m);
+                        continue;
+                    }
+                } catch (Exception ignored) {}
+                // fallback to name
+                try {
+                    String nm = m.getName();
+                    if (nm != null && !nm.isEmpty()) out.put(nm, m);
+                } catch (Exception ignored) {}
+            }
+        }
+        return out;
     }
 }

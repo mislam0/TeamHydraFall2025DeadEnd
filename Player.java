@@ -210,6 +210,11 @@ public class Player {
         return hp;
     }
 
+    public int setHp(int hp) {
+        this.hp = hp;
+        return hp;
+    }
+
     public int attackDamage() {
         return equippedWeapon != null ? equippedWeapon.getDamage() : baseAttackDamage;
     }
