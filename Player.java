@@ -8,7 +8,10 @@ public class Player {
     private Item equippedWeapon;
     private Item equippedArmor;
     private int baseAttackDamage;
-   
+
+    // NEW: track combat state so it can be saved/loaded
+    private boolean inCombat;
+
     public Player(){
         this.currentRoomNumber = 1;
         this.visitedRooms = new HashSet<>();
@@ -18,6 +21,7 @@ public class Player {
         this.inventory = new ArrayList<>();
         this.equippedWeapon = null;
         this.equippedArmor = null;
+        this.inCombat = false; // NEW
     }
 
     // Movement
@@ -30,6 +34,7 @@ public class Player {
             return null;
         }
 
+        // keep using the original internal setter
         setCurrentRoomNumber(nextRoomNumber);
         return roomMap.get(nextRoomNumber);
     }
@@ -39,16 +44,24 @@ public class Player {
         return currentRoomNumber;
     }
 
+    // ORIGINAL internal setter – left exactly as-is for your existing code
     private void setCurrentRoomNumber(int roomNumber) {
         this.currentRoomNumber = roomNumber;
         visitedRooms.add(roomNumber);
+    }
+
+    // NEW: public setter with roomMap, used by GameSerializer.deserialize(...)
+    // This does NOT replace the old one; it just delegates to it.
+    public void setCurrentRoomNumber(int roomNumber, Map<Integer, Room> roomMap) {
+        // Optionally you could validate roomMap here; for now we just reuse existing logic
+        setCurrentRoomNumber(roomNumber);
     }
 
     public boolean hasVisited(int roomNumber) {
         return visitedRooms.contains(roomNumber);
     }
 
-    // Enter Room 
+    // Enter Room  (original version – unchanged)
     public void enterRoom(Room room, Scanner scanner) {
         if (!room.isVisited()) {
             System.out.println("\nYou have arrived at " + room.getName() + "... " + room.getDescription());
@@ -87,11 +100,10 @@ public class Player {
                 System.out.println("You then see three colored tiles that can be moved around.. Say \"Move Tiles\" to start moving them.");
             }
 
-            // Statues puzzle hint
+            // Statues puzzle hint (room 18)
             if (room.getId() == 18 && !room.isStatuesPuzzleSolved()) {
-                System.out.println("You see three statues, they seem to be slightly aligned towards the entrance to this room,");
-                System.out.println("almost as if they're staring at you. Maybe you can move them..?");
-                System.out.println("Type \"Inspect statue\" to see the directions of the statue currently,");
+                System.out.println("You see three statues, they seem to be slightly aligned towards the entrance to this room, almost as if they're staring at you.");
+                System.out.println("Maybe you can move them..? Type \"Inspect statue\" to see the directions of the statue currently,");
                 System.out.println("or type \"Set statue direction\" to change the direction of the statues in order from left to right.");
             }
 
@@ -123,14 +135,19 @@ public class Player {
                 System.out.println("You then see three colored tiles that can be moved around.. Say \"Move Tiles\" to start moving them.");
             }
 
-            // Statues puzzle hint
+            // Statues puzzle hint (room 18)
             if (room.getId() == 18 && !room.isStatuesPuzzleSolved()) {
-                System.out.println("You see three statues, they seem to be slightly aligned towards the entrance to this room,");
-                System.out.println("almost as if they're staring at you. Maybe you can move them..?");
-                System.out.println("Type \"Inspect statue\" to see the directions of the statue currently,");
+                System.out.println("You see three statues, they seem to be slightly aligned towards the entrance to this room, almost as if they're staring at you.");
+                System.out.println("Maybe you can move them..? Type \"Inspect statue\" to see the directions of the statue currently,");
                 System.out.println("or type \"Set statue direction\" to change the direction of the statues in order from left to right.");
             }
         }
+    }
+
+    // NEW: overload used by RoomLoader.startGame(...)
+    // It just delegates to your original method so puzzle hints still work.
+    public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
+        enterRoom(room, scanner);
     }
 
     // Inventory Management
@@ -205,6 +222,8 @@ public class Player {
         "> HEAL <item>: uses a healing item, \n" +
         "> INVENTORY: lists items in inventory, \n" +
         "> STATUS: shows player status, \n" +
+        "> SAVE <name>: saves your game, \n" +
+        "> LOAD <name>: loads a saved game, \n" +
         "> QUIT: exits the game.");
     }
 
@@ -220,6 +239,11 @@ public class Player {
     // Stats
     public int getHp() {
         return hp;
+    }
+
+    // NEW: simple setter used by GameSerializer to restore HP
+    public void setHp(int hp) {
+        this.hp = hp;
     }
 
     public int attackDamage() {
@@ -238,5 +262,14 @@ public class Player {
     public void takeDamage(int damage) {
         hp -= damage ;
         if (hp < 0) hp = 0;
+    }
+
+    // NEW: combat state accessors for serializer and (future) combat system
+    public boolean isInCombat() {
+        return inCombat;
+    }
+
+    public void setInCombat(boolean inCombat) {
+        this.inCombat = inCombat;
     }
 }

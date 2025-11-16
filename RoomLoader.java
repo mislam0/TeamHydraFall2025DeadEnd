@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.*;
 
 public class RoomLoader {
@@ -6,13 +7,23 @@ public class RoomLoader {
     private Player player;
 
     // *** For items, including puzzle rewards ***
+    // itemMap: keyed by item ID (DM1, DM7, etc.) – used by your puzzles and monsters
     private Map<String, Item> itemMap;
+
+    // NEW: itemNameMap: keyed by item NAME – used by GameSerializer for SAVE/LOAD
+    private Map<String, Item> itemNameMap;
 
     public RoomLoader() {
         roomMap = Roomreader.readRooms("Map.txt");
 
         // Store globally
         itemMap = Itemreader.loadItems("Items.txt", roomMap);
+
+        // Build name-based map for serializer
+        itemNameMap = new HashMap<>();
+        for (Item it : itemMap.values()) {
+            itemNameMap.put(it.getName(), it);
+        }
 
         MonsterReader.loadMonsters("Monsters.txt", roomMap, itemMap);
 
@@ -135,6 +146,54 @@ public class RoomLoader {
 
                 case "STATUS":
                     player.printStatus();
+                    break;
+
+                // Save game from rah
+                case "SAVE":
+                    if (argument.isEmpty()) {
+                        System.out.println("Usage: SAVE <name>");
+                    } else {
+                        String saveName = argument;
+                        try {
+                            // Build monster registry basically from current rooms (by id or name or so)
+                            Map<String, Monster> monstersById = buildMonsterMap();
+                            Map<String, String> state =
+                                    GameSerializer.serialize(player, roomMap, itemNameMap, monstersById);
+                            SaveManager.save(saveName, state);
+                            System.out.println("Game saved as: " + saveName);
+                        } catch (IOException e) {
+                            System.err.println("Failed to save: " + e.getMessage());
+                        } catch (Exception e) {
+                            System.err.println("Unexpected error while saving: " + e.getMessage());
+                        }
+                    }
+                    break;
+
+                // LOAD game
+                case "LOAD":
+                    if (argument.isEmpty()) {
+                        System.out.println("Usage: LOAD <name>");
+                    } else {
+                        String loadName = argument;
+                        try {
+                            Map<String, String> loaded = SaveManager.load(loadName);
+                            Map<String, Monster> monstersById = buildMonsterMap();
+                            GameSerializer.deserialize(loaded, player, roomMap, itemNameMap, monstersById);
+                            System.out.println("Game loaded: " + loadName);
+
+                            // Refresh current room based on player's restored room number
+                            current = roomMap.get(player.getCurrentRoomNumber());
+                            if (current != null) {
+                                player.enterRoom(current, scanner);
+                            } else {
+                                System.out.println("Warning: loaded room not found. Staying in previous room.");
+                            }
+                        } catch (IOException e) {
+                            System.err.println("Failed to load: " + e.getMessage());
+                        } catch (Exception e) {
+                            System.err.println("Unexpected error while loading: " + e.getMessage());
+                        }
+                    }
                     break;
 
                 // Examine commands (door + panel)
@@ -530,5 +589,31 @@ public class RoomLoader {
         if (t.startsWith("s")) return "SOUTH";
         if (t.startsWith("w")) return "WEST";
         return t.toUpperCase();
+    }
+
+    // Maybe I should build a registry of monsters for serializer (id -> Monster, or name -> Monster)
+    private Map<String, Monster> buildMonsterMap() {
+        Map<String, Monster> out = new HashMap<>();
+        for (Room r : roomMap.values()) {
+            Monster m = r.getMonster();
+            if (m != null) {
+                try {
+                    // prefer id field if present via reflection
+                    java.lang.reflect.Field idF = Monster.class.getDeclaredField("id");
+                    idF.setAccessible(true);
+                    Object idVal = idF.get(m);
+                    if (idVal != null && !idVal.toString().isEmpty()) {
+                        out.put(idVal.toString(), m);
+                        continue;
+                    }
+                } catch (Exception ignored) {}
+                // fallback to name
+                try {
+                    String nm = m.getName();
+                    if (nm != null && !nm.isEmpty()) out.put(nm, m);
+                } catch (Exception ignored) {}
+            }
+        }
+        return out;
     }
 }
