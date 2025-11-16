@@ -374,7 +374,7 @@ public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> ro
                 System.out.println("Monster: " + monster.getName());
                 System.out.println("Description: " + monster.getDescription());
                 System.out.println("Type: " + monster.getType());
-                System.out.println("HP: " + monster.getHitPoints());
+                System.out.println("HP: " + monster.getHitPoints() + "/" + monster.initialHitPoints);
                 System.out.println("Damage: " + monster.getDamage());
                 System.out.println("Dice Type: " + monster.monsterTypeDice());
                 
