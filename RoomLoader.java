@@ -4,9 +4,13 @@ public class RoomLoader {
     private List<Room> rooms;
     private Map<Integer, Room> roomMap;
     private Player player;
+    
 
     public RoomLoader() {
         roomMap = Roomreader.readRooms("Map.txt");
+        Map<String, Item> itemMap = Itemreader.loadItems("Items.txt", roomMap);
+        MonsterReader.loadMonsters("Monsters.txt", roomMap, itemMap);
+
         rooms = new ArrayList<>(roomMap.values());
     }
 
@@ -42,6 +46,12 @@ public class RoomLoader {
                     if (next != null) {
                         current = next;
                         player.enterRoom(current, scanner);
+
+                        //if there is a monster print a notification
+                        Monster m = current.getMonster();
+                        if(m != null && m.isAlive()){
+                           
+                        }
                     }
                     break;
 
