@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Item {
     private String id;
@@ -11,13 +12,6 @@ public class Item {
     private final String dice;
     private final String rarity;
 
-
-
-
-
-    
-
-    
 
     public Item(String id, String name, String description, String type, int hp, int damage, double armor, String dice, String rarity) {
         this.id = id;

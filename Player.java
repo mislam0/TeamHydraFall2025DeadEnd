@@ -49,17 +49,29 @@ public class Player {
     public boolean hasVisited(int roomNumber) {
         return visitedRooms.contains(roomNumber);
     }
-     // Enter Room 
-        public void enterRoom(Room room, Scanner scanner) {
-            if (!room.isVisited()) {
-                System.out.println("\nYou have arrived at " + room.getName() + "... " + room.getDescription());
-                room.visit();
-            } else {
-                System.out.println("\nYou have returned to " + room.getName() + ".");
-            }
-    
+     // Enter a room
+public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
+    if (room == null) {
+        System.out.println("Error: Room does not exist.");
+        return;
+    }
 
-        }
+    // Print description if first visit
+    if (!room.isVisited()) {
+        System.out.println("\nYou have arrived at " + room.getName() + "... " + room.getDescription());
+        room.visit();
+    } else {
+        System.out.println("\nYou have returned to " + room.getName() + ".");
+    }
+
+    // Set current room number
+    setCurrentRoomNumber(room.getId());
+
+    // Trigger combat if monster is present
+    if (room.hasMonster() && room.getMonster().isAlive()) {
+        handleCombat(room.getMonster(), scanner, roomMap);
+    }
+}
 
     // Inventory Management
 
@@ -190,40 +202,45 @@ public class Player {
 
     private void handlePlayerDeath(){
         System.out.println("You have been defeated. Game Over.");
-        setInCombat(false);
+        
+        System.exit(0);
     }
 
     //combat methods
-    public void handleCombat(Monster monster,Room room, Scanner scanner){
+    // Combat method
+public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> roomMap) {
+    if (monster == null || !monster.isAlive()) {
+        System.out.println("No monster to fight here.");
+        return;
+    }
+
+    System.out.println("You are in combat with " + monster.getName() + "!");
+    setInCombat(true);
+
+    Dice dice = new Dice();
+
+    while (isInCombat && monster.isAlive() && isAlive()) {
         Room currentRoom = roomMap.get(currentRoomNumber);
-        if (monster == null || !monster.isAlive()) {
-            System.out.println("No monster to fight here.");
+        if (currentRoom == null) {
+            System.out.println("Error: Current room not found.");
+            setInCombat(false);
             return;
         }
 
-        System.out.println("You are in combat with "+ monster.getName() + "!");
-        setInCombat(true);
-        while(isInCombat && monster.isAlive() && isAlive()){
-            System.out.println("\n" + monster.getName() + " HP: " + monster.getHitPoints());
-            System.out.println("Your HP: " + getHp());
+        System.out.println("\n" + monster.getName() + " HP: " + monster.getHitPoints());
+        System.out.println("Your HP: " + getHp());
 
-            if(!isAlive()){
-                setInCombat(false);
-                handlePlayerDeath();
-                break;
-            }
+        System.out.println("\nWhat would you like to do?");
+        System.out.println("1. Attack");
+        System.out.println("2. Heal");
+        System.out.println("3. Escape");
+        System.out.println("4. Analyze Monster");
 
-            System.out.println("\nWhat would you like to do?");
-            System.out.println("1. Attack");
-            System.out.println("2. Heal");
-            System.out.println("3. Run");
-            System.out.println("4. Analyze Monster");
+        String choice = scanner.nextLine().trim().toUpperCase();
 
-            String choice = scanner.nextLine().trim();
-
-            switch(choice.toUpperCase()) {
-                case "1":
-                case "ATTACK":
+        switch (choice) {
+            case "1":
+            case "ATTACK":
                 int playerDamage = attackDamage();
                 if (playerDamage <= 0) {
                     System.out.println("You strike but deal no damage.");
@@ -232,117 +249,108 @@ public class Player {
                     System.out.println("You deal " + playerDamage + " damage!");
                 }
 
-                if(monster.isAlive()){
-                      
-                    // Monster attacks back
-                    int monsterDamage = monster.getDamage() - defense();
-                    int net = Math.max(0, monsterDamage - defense());
-                    takeDamage(net);
-                    System.out.println(monster.getName() + "hits you for " + net + " damage!");
-                      if(!isAlive()){
+                if (monster.isAlive()) {
+                    int monsterDamage = Math.max(0, monster.getDamage() - defense());
+                    takeDamage(monsterDamage);
+                    System.out.println(monster.getName() + " hits you for " + monsterDamage + " damage!");
+                    if (!isAlive()) {
                         setInCombat(false);
                         handlePlayerDeath();
                         return;
-                      }
-                        } else {
+                    }
+                } else {
                     System.out.println("You have defeated " + monster.getName() + "!");
                     setInCombat(false);
                     Item drop = monster.getDropItem();
-                    if(drop !=null){
-                        currentRoom.addItem(drop);
+                    if (drop != null) {
+                        inventory.add(drop);
                         System.out.println(monster.getName() + " dropped " + drop.getName() + "!");
                     }
-                    if(monster.getType().equalsIgnoreCase("Boss")){
+                    if (monster.getType().equalsIgnoreCase("Boss")) {
                         System.out.println("Congratulations! You have defeated the Boss and completed the game!");
-                        currentRoom.removeMonster();
+                        System.exit(0);
                     }
-                } break;
-                case "2":
-                case "HEAL":
-                    System.out.print("Enter healing item name: ");
-                    String itemName = scanner.nextLine().trim();
-                    Item healItem = getItemByName(itemName);
-                    if (healItem == null) {
-                        System.out.println("Item not in inventory or doesn't exist.");
-                    } else {
-                        heal(healItem);
-                    }if (monster.isAlive()) {
-                        int monsterDamage2 = monster.attack();
-                        int net2 = Math.max(0, monsterDamage2 - defense());
-                        takeDamage(net2);
-                        System.out.println(monster.getName() + " hits you for " + net2 + " damage!");
-                        if (!isAlive()) {
-                            setInCombat(false);
-                            handlePlayerDeath();
-                            return;
+                }
+                break;
+
+            case "2":
+            case "HEAL":
+                System.out.print("Enter healing item name: ");
+                String itemName = scanner.nextLine().trim();
+                Item healItem = getItemByName(itemName);
+                if (healItem != null) {
+                    heal(healItem);
+                } else {
+                    System.out.println("Item not in inventory or doesn't exist.");
+                }
+
+                // Monster attacks after healing
+                if (monster.isAlive()) {
+                    int monsterDamage = Math.max(0, monster.getDamage() - defense());
+                    takeDamage(monsterDamage);
+                    System.out.println(monster.getName() + " hits you for " + monsterDamage + " damage!");
+                    if (!isAlive()) {
+                        setInCombat(false);
+                        handlePlayerDeath();
+                        return;
+                    }
+                }
+                break;
+
+            case "3":
+            case "ESCAPE":
+                boolean escaped = (dice.dX(2) == 1); // 50% chance
+                if (escaped) {
+                    System.out.println("You managed to escape!");
+                    setInCombat(false);
+
+                    Map<String, Integer> exits = currentRoom.getExits();
+                    List<String> validDirs = new ArrayList<>();
+                    for (Map.Entry<String, Integer> entry : exits.entrySet()) {
+                        if (entry.getValue() != null && entry.getValue() > 0) {
+                            validDirs.add(entry.getKey());
                         }
                     }
-                    break;
-                    case "3":
-                    case "RUN":
-                        boolean escaped = Math.random() < 0.5;
-                        if (escaped) {
-                            System.out.println("You managed to escape!");
-                            setInCombat(false);
-    
-                            // Move player to a random valid exit (if any)
-                            Map<String, Integer> exits = currentRoom.getExits();
-                            List<String> validDirs = new ArrayList<>();
-                            for (Map.Entry<String, Integer> e : exits.entrySet()) {
-                                if (e.getValue() != null && e.getValue() > 0) validDirs.add(e.getKey());
-                            }
-                            if (!validDirs.isEmpty()) {
-                                String chosenDir = validDirs.get(new Random().nextInt(validDirs.size()));
-                                Room next = move(chosenDir, roomMap);
-                                if (next != null) {
-                                    System.out.println("You run " + chosenDir + " to " + next.getName() + ".");
-                                    // Optionally, if the next room has a monster, the caller (RoomLoader) can trigger combat there.
-                                } else {
-                                    System.out.println("You couldn't find a way out and remain in the same room.");
-                                }
-                            } else {
-                                System.out.println("No exits to run through — you remain in place.");
-                            }
+
+                    if (!validDirs.isEmpty()) {
+                        int roll = dice.dX(validDirs.size());
+                        String chosenDir = validDirs.get(roll - 1);
+                        Room next = move(chosenDir, roomMap);
+                        if (next != null) {
+                            System.out.println("You run " + chosenDir + " to " + next.getName() + ".");
                         } else {
-                            System.out.println("Failed to escape!");
-                            int monsterDamage3 = monster.attack();
-                            int net3 = Math.max(0, monsterDamage3 - defense());
-                            takeDamage(net3);
-                            System.out.println(monster.getName() + " hits you for " + net3 + " damage!");
-                            if (!isAlive()) {
-                                setInCombat(false);
-                                handlePlayerDeath();
-                                return;
-                            }
+                            System.out.println("You couldn't find a way out and remain in the same room.");
                         }
-                        break;
-                        case "4":
-                        case "ANALYZE":
-                            System.out.println("Monster: " + monster.getName());
-                            System.out.println("Description: " + monster.getDescription());
-                            System.out.println("Type: " + monster.getType());
-                            System.out.println("HP: " + monster.getHitPoints());
-                            System.out.println("Damage: " + monster.getDamage());
-                            break;
-                default:
-                    System.out.println("Invalid choice. Please select a valid action.");
-                    break;
+                    } else {
+                        System.out.println("No exits to run through — you remain in place.");
+                    }
 
+                } else {
+                    System.out.println("Failed to escape!");
+                    int monsterDamage = Math.max(0, monster.getDamage() - defense());
+                    takeDamage(monsterDamage);
+                    System.out.println(monster.getName() + " hits you for " + monsterDamage + " damage!");
+                    if (!isAlive()) {
+                        setInCombat(false);
+                        handlePlayerDeath();
+                        return;
+                    }
+                }
+                break;
 
-            }
+            case "4":
+            case "ANALYZE":
+                System.out.println("Monster: " + monster.getName());
+                System.out.println("Description: " + monster.getDescription());
+                System.out.println("Type: " + monster.getType());
+                System.out.println("HP: " + monster.getHitPoints());
+                System.out.println("Damage: " + monster.getDamage());
+                break;
 
+            default:
+                System.out.println("Invalid choice. Please select a valid action.");
+               }   break;
         }
-        
     }
-
-
-
-
-
-
-
-
-
-
-
 }
+
