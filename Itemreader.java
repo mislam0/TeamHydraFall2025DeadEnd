@@ -3,12 +3,22 @@ import java.util.*;
 
 public class Itemreader {
 
-    public static void loadItems(String filename, Map<Integer, Room> roomMap) {
+    // Now returns a map of item ID -> Item for use by MonsterReader
+    public static Map<String, Item> loadItems(String filename, Map<Integer, Room> roomMap) {
+        Map<String, Item> itemMap = new HashMap<>();
+
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if (line.startsWith("#") || line.isEmpty()) continue;
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("#")) continue;
+
                 String[] parts = line.split("\\|");
+                if (parts.length < 10) {
+                    System.out.println("Skipping malformed item line: " + line);
+                    continue;
+                }
+
                 String itemID = parts[0].trim();
                 String name = parts[1].trim();
                 String desc = parts[2].trim();
@@ -20,16 +30,33 @@ public class Itemreader {
                 String rarity = parts[8].trim();
                 int roomId = parseIntSafe(parts[9].trim());
 
-                Room room = roomMap.get(roomId);
-                if (room != null) room.addItem(new Item(itemID,name, desc, type, hp, damage, armor, dice, rarity));
-                System.out.println("Properly loaded item: " + name + " into room ID: " + roomId);
+                Item item = new Item(itemID, name, desc, type, hp, damage, armor, dice, rarity);
+
+                // store in global item map
+                itemMap.put(itemID, item);
+
+                // put in room if valid roomId > 0 and room exists
+                if (roomId > 0) {
+                    Room room = roomMap.get(roomId);
+                    if (room != null) {
+                        room.addItem(item);
+                        
+                    } else {
+                        System.out.println("Item " + name + " has room ID " + roomId + " but no such room exists.");
+                    }
+                } else {
+                    System.out.println("Loaded item: " + name + " (no room assigned)");
+                }
             }
         } catch (Exception e) {
             System.out.println("Error loading items: " + e.getMessage());
+            e.printStackTrace();
         }
+
+        return itemMap;
     }
 
-private static int parseIntSafe(String s) {
+    private static int parseIntSafe(String s) {
         try {
             return s.equals("-") ? 0 : Integer.parseInt(s);
         } catch (NumberFormatException e) {
@@ -45,7 +72,3 @@ private static int parseIntSafe(String s) {
         }
     }
 }
-
-
-
-
