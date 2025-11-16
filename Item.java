@@ -13,16 +13,6 @@ public class Item {
     private final String rarity;
 
 
-<<<<<<< HEAD
-
-
-
-    
-
-    
-
-=======
->>>>>>> 94f7c2d2e71ff7e61f42724a3fe7df2c3ef2abca
     public Item(String id, String name, String description, String type, int hp, int damage, double armor, String dice, String rarity) {
         this.id = id;
         this.name = name;
@@ -75,6 +65,7 @@ public class Item {
 
 
      public boolean isConsumable() { return "health".equalsIgnoreCase(type) && healing > 0; }
+     public boolean isRestore() { return "Restore".equalsIgnoreCase(type) && healing > 0; }
     public boolean isWeapon() { return "weapon".equalsIgnoreCase(type); }
     public boolean isArmor() { return "defense".equalsIgnoreCase(type); }
     public boolean isEquipable() { return isWeapon() || isArmor(); }

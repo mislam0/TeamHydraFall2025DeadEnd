@@ -1,18 +1,30 @@
 import java.util.*;
 
 public class Player {
+    // Room tracking
     private int currentRoomNumber;
     private Set<Integer> visitedRooms;
+
+    // Player stats
     private int hp;
+    private int baseAttackDamage;
     private List<Item> inventory;
+    private double defense;
+    
+    
+
+    // Equipped items
     private Item equippedWeapon;
     private Item equippedArmor;
-    private int baseAttackDamage;
-<<<<<<< HEAD
-    private int baseDefense;
-=======
+
+    // Combat state
     private boolean isInCombat;
->>>>>>> 94f7c2d2e71ff7e61f42724a3fe7df2c3ef2abca
+
+    // Constants
+    private final int MAX_HP = 100;
+    private final int MAX_INVENTORY_SIZE = 25;
+
+   
    
     public Player(){
         this.currentRoomNumber = 1;
@@ -20,18 +32,12 @@ public class Player {
         this.visitedRooms.add(currentRoomNumber);
         this.hp = 100;
         this.baseAttackDamage = 0;
-<<<<<<< HEAD
-        this.baseDefense = 0;
-        this.inventory = new ArrayList<>();
-        this.equippedWeapon = null;
-        this.equippedArmor = null;
-=======
+        this.defense = 0.0;
         this.inventory = new ArrayList<>();
         this.equippedWeapon = null;
         this.equippedArmor = null;
         this.isInCombat = false;
 
->>>>>>> 94f7c2d2e71ff7e61f42724a3fe7df2c3ef2abca
     }
      // Movement
     public Room move(String direction, Map<Integer, Room> roomMap) {
@@ -60,157 +66,6 @@ public class Player {
     public boolean hasVisited(int roomNumber) {
         return visitedRooms.contains(roomNumber);
     }
-<<<<<<< HEAD
-     // Enter Room 
-        public void enterRoom(Room room, Scanner scanner) {
-            if (!room.isVisited()) {
-                System.out.println("\nYou have arrived at " + room.getName() + "... " + room.getDescription());
-                room.visit();
-            } else {
-                System.out.println("\nYou have returned to " + room.getName() + ".");
-            }
-    
-
-        }
-
-    // Inventory Management
-
-    public List<Item> getInventory() {
-        return inventory;
-    }
-
-        public void pickUp(Item item) {
-        inventory.add(item);
-    }
-
-
-
-    public void drop(Item item) {
-        inventory.remove(item);
-        if (item == equippedWeapon) unequip(item);
-        if (item == equippedArmor) unequip(item);
-    }
-
-
-
-    public Item getItemByName(String name) {
-        for (Item i : inventory) if (i.getName().equalsIgnoreCase(name)) return i;
-        return null;
-    }
-
-
-
-
-    // Equip / Unequip
-    public void equip(Item item) {
-        if (item.isEquipable() && inventory.contains(item) && item.isWeapon()) {
-            equippedWeapon = item;
-            System.out.println(item.getName() + " equipped. Attack damage: " + attackDamage());
-
-        } else if (item.isEquipable() && inventory.contains(item) && item.isArmor()) {
-            equippedArmor = item;
-            System.out.println(item.getName() + " equipped. Defense increased." + defense());
-
-
-
-
-
-        }
-    else {
-            System.out.println("Cannot equip this item.");
-        }
-    }
-
-    public void unequip(Item item) {
-        if (equippedWeapon != null) {
-            System.out.println(equippedWeapon.getName() + " unequipped.");
-            equippedWeapon = null;
-        } else if (equippedArmor != null) {
-            System.out.println(equippedArmor.getName() + " unequipped.");
-            equippedArmor = null;
-        } else {
-            System.out.println("No item equipped.");
-        }
-    }
-
-    // Heal
-    public void heal(Item item) {
-        if (item.isConsumable() && inventory.contains(item)) {
-            hp += item.getHealing();
-            inventory.remove(item);
-            System.out.println("Healed " + item.getHealing() + " HP. Current HP: " + hp);
-        } else {
-            System.out.println("Cannot use this item to heal.");
-        }
-    }
-
-    // Help Command
-    public void help() {
-        System.out.println(
-        "Available commands:\n"+
-        "> MOVE <direction>: moves the player in the specified direction (NORTH, EAST, SOUTH, WEST)\n" +
-        "> EXPLORE: lists items in the room \n" + 
-        "> PICKUP <item>: picks up an item from the room, \n" + 
-        "> DROP <item>: drops an item into the room, \n" + 
-        "> INSPECT <item>: shows item description, \n" + 
-        "> EQUIP <item>: equips an item, \n" +
-        "> UNEQUIP <item>: unequips an item, \n" +
-        "> USE <item>: uses a healing item, \n" +
-        "> INVENTORY: lists items in inventory, \n" +
-        "> STATUS: shows player status, \n" +
-        "> QUIT: exits the game.");
-    }
-
-    // Status Command
-    public void printStatus() {
-        System.out.println("Player HP: " + hp);
-        if (equippedWeapon != null) {
-            System.out.println("Equipped Weapon: " + equippedWeapon.getName() + " (Damage: " + equippedWeapon.getDamage() + ")");
-        } 
-        if (equippedArmor != null) {
-            System.out.println("Equipped Armor: " + equippedArmor.getName() + " (Defense: " + equippedArmor.getArmor() + ")");
-        } else {
-            System.out.println("No item equipped.");
-        }
-    }
-
-
-
-    // Stats
-    public int getHp() {
-        return hp;
-    }
-
-    public int attackDamage() {
-        return equippedWeapon != null ? equippedWeapon.getDamage() : baseAttackDamage;
-    }
-
-    public double defense() {
-        return equippedArmor != null ? (double) equippedArmor.getArmor() : baseDefense;
-    }
-
-    public boolean isAlive() {
-        return hp > 0;
-    }
-
-    // Take Damage
-     public void takeDamage(int damage) {
-        hp -= damage ;
-        if (hp < 0) hp = 0;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-=======
      // Enter a room
 public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
     if (room == null) {
@@ -233,7 +88,6 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
     if (room.hasMonster() && room.getMonster().isAlive()) {
         handleCombat(room.getMonster(), scanner, roomMap);
     }
->>>>>>> 94f7c2d2e71ff7e61f42724a3fe7df2c3ef2abca
 }
 
     // Inventory Management
@@ -267,10 +121,16 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
     // Equip / Unequip
     public void equip(Item item) {
         if (item.isEquipable() && inventory.contains(item) && item.isWeapon()) {
+            if (equippedWeapon != null) {
+                System.out.println(equippedWeapon.getName() + " unequipped.");
+            }
             equippedWeapon = item;
             System.out.println(item.getName() + " equipped. Attack damage: " + attackDamage());
 
         } else if (item.isEquipable() && inventory.contains(item) && item.isArmor()) {
+            if (equippedArmor != null) {
+                System.out.println(equippedArmor.getName() + " unequipped.");
+            }
             equippedArmor = item;
             System.out.println(item.getName() + " equipped. Defense increased." + defense());
 
@@ -298,10 +158,19 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
 
     // Heal
     public void heal(Item item) {
-        if (item.isConsumable() && inventory.contains(item)) {
+    int starthp = hp;
+        if (hp < MAX_HP && item.isConsumable() && inventory.contains(item) ) {
             hp += item.getHealing();
+
+            if (hp > MAX_HP) {
+            hp = MAX_HP;
+            }
+
             inventory.remove(item);
-            System.out.println("Healed " + item.getHealing() + " HP. Current HP: " + hp);
+            System.out.println("Healed " + (hp - starthp) + " HP. Current HP: " + hp); 
+        } else if (hp >= MAX_HP) {
+            System.out.println("Your HP is already full.");
+            
         } else {
             System.out.println("Cannot use this item to heal.");
         }
@@ -327,7 +196,9 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
         System.out.println("Player HP: " + hp);
         if (equippedWeapon != null) {
             System.out.println("Equipped Item: " + equippedWeapon.getName() + " (Damage: " + equippedWeapon.getDamage() + ")");
-        } else {
+        } if (equippedArmor != null) {
+            System.out.println("Equipped Armor: " + equippedArmor.getName() + " (Armor: " + equippedArmor.getArmor() + ")");
+        }else {
             System.out.println("No item equipped.");
         }
     }
@@ -374,8 +245,37 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
 
     return baseAttackDamage;
 }
-    public int defense() {
-        return equippedArmor != null ? (int) equippedArmor.getArmor() : 0;
+
+public int monsterAttackDamageWithDice(Monster monster) {
+    Dice dice = new Dice();
+    if (monster != null) {
+        int base = monster.getDamage();
+        String diceType = monster.monsterTypeDice();
+        int diceRoll = 0;
+
+        if (diceType != null && !diceType.isEmpty()) {
+            switch(diceType.toLowerCase()) {
+                case "d4": diceRoll = dice.d4(); break;
+                case "d8": diceRoll = dice.d8(); break;
+                case "d12": diceRoll = dice.d12(); break;
+            }
+        }
+
+        int totalDamage = base + diceRoll;
+
+        if (diceRoll > 0) {
+            System.out.println(monster.getName() + " attacks (rolled " + diceRoll + ") for " + totalDamage + " damage!");
+        } else {
+            System.out.println(monster.getName() + " attacks for " + totalDamage + " damage!");
+        }
+
+        return totalDamage;
+    }
+    return 0;
+}
+
+    public double defense() {
+        return equippedArmor != null ? (double) equippedArmor.getArmor() : 0;
     }
 
     public boolean isAlive() {
@@ -424,17 +324,35 @@ public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> ro
         System.out.println("\n" + monster.getName() + " HP: " + monster.getHitPoints());
         System.out.println("Your HP: " + getHp());
 
+        if (hp <= 25) {
+                System.out.println("Hint: Use the ‘Heals’ command to recover, or “Escape” to return to safety in the previous room.");
+            }
+
         System.out.println("\nWhat would you like to do?");
-        System.out.println("1. Attack");
-        System.out.println("2. Heal");
-        System.out.println("3. Escape");
-        System.out.println("4. Analyze Monster");
+        System.out.println("1. Analyze Monster");
+        System.out.println("2. Attack");
+        System.out.println("3. Heal");
+        System.out.println("4. Escape");
+        System.out.print("Enter command: " );
+        
 
         String choice = scanner.nextLine().trim().toUpperCase();
 
         switch (choice) {
+
             case "1":
-case "ATTACK":
+            case "ANALYZE":
+                System.out.println("Monster: " + monster.getName());
+                System.out.println("Description: " + monster.getDescription());
+                System.out.println("Type: " + monster.getType());
+                System.out.println("HP: " + monster.getHitPoints());
+                System.out.println("Damage: " + monster.getDamage());
+               
+                break;
+
+
+            case "2":
+            case "ATTACK":
     int playerDamage = attackDamageWithDice();
     if (playerDamage <= 0) {
         System.out.println("You strike but deal no damage.");
@@ -445,7 +363,7 @@ case "ATTACK":
 
     if (monster.isAlive()) {
         // Monster attacks back
-        int monsterDamage = Math.max(0, monster.getDamage() - defense());
+        int monsterDamage = (int) (monsterAttackDamageWithDice(monster) * (1 - defense()));
         takeDamage(monsterDamage);
         System.out.println(monster.getName() + " hits you for " + monsterDamage + " damage!");
         if (!isAlive()) {
@@ -453,12 +371,26 @@ case "ATTACK":
             return; // exit game
         }
     } else {
+
+        // Monster is defeated and drops item
         System.out.println("You have defeated " + monster.getName() + "!");
         Item drop = monster.getDropItem();
-        if (drop != null) {
+        if (drop != null && !drop.getName().equals("-") && !drop.getType().equals("Restore")) {
             inventory.add(drop);
             System.out.println(monster.getName() + " dropped " + drop.getName() + "!");
         }
+
+        // Monster drops health restore item that is auto-used
+        if (drop != null && drop.getType().equals("Restore")) {
+            int starthp = hp;
+            hp += drop.getHealing();
+            if (hp > MAX_HP) {
+            hp = MAX_HP;
+            }
+            System.out.println("You obtained a health restoration item: " + drop.getName()+"\n" +"You healed " + (hp - starthp) +"HP" +"\n" +"Your HP is now " + hp + "!");
+
+        }
+        // If boss defeated, end game
         if (monster.getType().equalsIgnoreCase("Boss")) {
             System.out.println("Congratulations! You have defeated the Boss and completed the game!");
             System.exit(0);
@@ -467,20 +399,16 @@ case "ATTACK":
         setInCombat(false);
     }
     break;
-            case "2":
+            case "3":
             case "HEAL":
                 System.out.print("Enter healing item name: ");
                 String itemName = scanner.nextLine().trim();
                 Item healItem = getItemByName(itemName);
                 if (healItem != null) {
                     heal(healItem);
-                } else {
-                    System.out.println("Item not in inventory or doesn't exist.");
-                }
-
-                // Monster attacks after healing
+                    // Monster attacks after healing
                 if (monster.isAlive()) {
-                    int monsterDamage = Math.max(0, monster.getDamage() - defense());
+                    int monsterDamage = (int) (monsterAttackDamageWithDice(monster) * (1 - defense()));
                     takeDamage(monsterDamage);
                     System.out.println(monster.getName() + " hits you for " + monsterDamage + " damage!");
                     if (!isAlive()) {
@@ -489,10 +417,16 @@ case "ATTACK":
                         return;
                     }
                 }
+                } else {
+                    System.out.println("Item not in inventory or doesn't exist.");
+                    break;
+                }
+
+                
                 break;
 
-            case "3":
-            case "escape":
+            case "4":
+            case "ESCAPE":
                 boolean escaped = (dice.dX(2) == 1); // 50% chance
                 if (escaped) {
                     System.out.println("You managed to escape!");
@@ -521,7 +455,7 @@ case "ATTACK":
 
                 } else {
                     System.out.println("Failed to escape!");
-                    int monsterDamage = Math.max(0, monster.getDamage() - defense());
+                    int monsterDamage = (int) (monsterAttackDamageWithDice(monster) * (1 - defense()));
                     takeDamage(monsterDamage);
                     System.out.println(monster.getName() + " hits you for " + monsterDamage + " damage!");
                     if (!isAlive()) {
@@ -532,15 +466,7 @@ case "ATTACK":
                 }
                 break;
 
-            case "4":
-            case "ANALYZE":
-                System.out.println("Monster: " + monster.getName());
-                System.out.println("Description: " + monster.getDescription());
-                System.out.println("Type: " + monster.getType());
-                System.out.println("HP: " + monster.getHitPoints());
-                System.out.println("Damage: " + monster.getDamage());
-               
-                break;
+            
 
             default:
                 System.out.println("Invalid choice. Please select a valid action.");

@@ -36,6 +36,8 @@ public class Roomreader {
                 if (south > 0) room.addExit("SOUTH", south);
                 if (west  > 0) room.addExit("WEST", west);
 
+            
+
                 roomMap.put(id, room); // add room to map
             }
         } catch (IOException e) {

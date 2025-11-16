@@ -57,7 +57,7 @@ public class MonsterReader {
                 if (room != null) {
                     room.getMonster();
                     room.setMonster(monster);
-                    System.out.println("Loaded monster: " + name + " into room : " + roomNumber + "with drops: "+dropItemId);
+                    System.out.println("Loaded monster: " + name + " into room : " + roomNumber + " with drops: "+dropItemId);
                    
                 } else {
                     System.out.println("Room " + roomNumber + " not found for monster " + name);

@@ -12,13 +12,9 @@ public class Itemreader {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
-<<<<<<< HEAD
-                if (line.startsWith("#") || line.isEmpty()) continue; // Skip comments and empty lines
-=======
                 line = line.trim();
                 if (line.isEmpty() || line.startsWith("#")) continue;
 
->>>>>>> 94f7c2d2e71ff7e61f42724a3fe7df2c3ef2abca
                 String[] parts = line.split("\\|");
                 if (parts.length < 10) {
                     System.out.println("Skipping malformed item line: " + line);
@@ -36,14 +32,6 @@ public class Itemreader {
                 String rarity = parts[8].trim();
                 int roomId = parseIntSafe(parts[9].trim());
 
-<<<<<<< HEAD
-                Item item =new Item(itemID,name, desc, type, hp, damage, armor, dice, rarity);
-                
-
-                Room room = roomMap.get(roomId);
-                if (room != null || roomId != 0) room.addItem(item);
-                System.out.println("Properly loaded item: " + name + " into room ID: " + roomId);
-=======
                 Item item = new Item(itemID, name, desc, type, hp, damage, armor, dice, rarity);
 
                 // store in global item map
@@ -54,6 +42,7 @@ public class Itemreader {
                     Room room = roomMap.get(roomId);
                     if (room != null) {
                         room.addItem(item);
+                        System.out.println("Loaded item: " + name + " into room: " + roomId);
                        
                     } else {
                         System.out.println("Item " + name + " has room ID " + roomId + " but no such room exists.");
@@ -61,7 +50,6 @@ public class Itemreader {
                 } else {
                     System.out.println("Loaded item: " + name + " (no room assigned)");
                 }
->>>>>>> 94f7c2d2e71ff7e61f42724a3fe7df2c3ef2abca
             }
         } catch (Exception e) {
             System.out.println("Error loading items: " + e.getMessage());
