@@ -5,13 +5,13 @@ public class RoomLoader {
     private Map<Integer, Room> roomMap;
     private Player player;
 
-    // *** ADDED FOR PUZZLE ITEM REWARD ***
+    // *** For items, including puzzle rewards ***
     private Map<String, Item> itemMap;
 
     public RoomLoader() {
         roomMap = Roomreader.readRooms("Map.txt");
 
-        // *** CHANGED to store globally ***
+        // Store globally
         itemMap = Itemreader.loadItems("Items.txt", roomMap);
 
         MonsterReader.loadMonsters("Monsters.txt", roomMap, itemMap);
@@ -116,7 +116,7 @@ public class RoomLoader {
                     player.printStatus();
                     break;
 
-                // Examine door command for door puzzle
+                // Examine commands (door + panel)
                 case "EXAMINE":
                     if (argument.equalsIgnoreCase("door")) {
                         if (current.getId() == 3 && !current.isDoorPuzzleSolved()) {
@@ -124,12 +124,29 @@ public class RoomLoader {
                         } else {
                             System.out.println("There is no door to examine.");
                         }
+                    } else if (argument.equalsIgnoreCase("panel")) {
+                        if (current.getId() == 5) {
+                            if (current.getLeverSeq1() == 0 &&
+                                current.getLeverSeq2() == 0 &&
+                                current.getLeverSeq3() == 0) {
+                                System.out.println("You have not attempted to pull the lever yet.");
+                            } else {
+                                System.out.println("Your last lever sequence was: " +
+                                        current.getLeverSeq1() + ", " +
+                                        current.getLeverSeq2() + ", " +
+                                        current.getLeverSeq3() + ".");
+                            }
+                            System.out.println("You have reset the panel " +
+                                    current.getLeverResetCount() + " times.");
+                        } else {
+                            System.out.println("There is no panel to examine.");
+                        }
                     } else {
                         System.out.println("Examine what?");
                     }
                     break;
 
-                // *** PUZZLE COMMAND: ANSWER DOOR ***
+                // Door puzzle answer
                 case "ANSWER":
                     if (argument.equalsIgnoreCase("door")) {
                         if (current.getId() == 3 && !current.isDoorPuzzleSolved()) {
@@ -141,7 +158,7 @@ public class RoomLoader {
                                 System.out.println("The lock clicks open.");
                                 current.setDoorPuzzleSolved(true);
 
-                                // Getting that item for this puzzle
+                                // Getting that item for this puzzle (Shard of Bone, DM7)
                                 Item reward = itemMap.get("DM7");
                                 if (reward != null) {
                                     player.pickUp(reward);
@@ -159,6 +176,62 @@ public class RoomLoader {
                     }
                     break;
 
+                // Lever puzzle: Pull Lever
+                case "PULL":
+                    if (argument.equalsIgnoreCase("lever")) {
+                        if (current.getId() == 5) {
+                            if (current.isLeverPuzzleSolved()) {
+                                System.out.println("The lever is already set in place. Nothing more happens.");
+                            } else if (current.isLeverRequiresReset()) {
+                                System.out.println("You have to reset the panel first.");
+                            } else {
+                                System.out.print("What is your first sequence? (1-5) ");
+                                int s1 = parseIntOrDefault(scanner.nextLine().trim(), -1);
+
+                                System.out.print("What is your second sequence? (1-5) ");
+                                int s2 = parseIntOrDefault(scanner.nextLine().trim(), -1);
+
+                                System.out.print("What is your third sequence? (1-5) ");
+                                int s3 = parseIntOrDefault(scanner.nextLine().trim(), -1);
+
+                                current.setLeverSequence(s1, s2, s3);
+                                current.setLeverRequiresReset(true);
+
+                                if (s1 == 1 && s2 == 2 && s3 == 3) {
+                                    System.out.println("You hear a heavy click from within the walls.");
+                                    current.setLeverPuzzleSolved(true);
+                                    current.setLeverRequiresReset(false);
+
+                                    // Reward: DM1
+                                    Item reward2 = itemMap.get("DM1");
+                                    if (reward2 != null) {
+                                        player.pickUp(reward2);
+                                        System.out.println("You obtained: " + reward2.getName() + "!");
+                                    }
+                                }
+                            }
+                        } else {
+                            System.out.println("There is no lever to pull here.");
+                        }
+                    } else {
+                        System.out.println("Pull what?");
+                    }
+                    break;
+
+                // Lever puzzle: Reset Panel
+                case "RESET":
+                    if (argument.equalsIgnoreCase("panel")) {
+                        if (current.getId() == 5) {
+                            current.resetLeverPanel();
+                            System.out.println("You reset the panel. You can pull the lever again.");
+                        } else {
+                            System.out.println("There is no panel to reset.");
+                        }
+                    } else {
+                        System.out.println("Reset what?");
+                    }
+                    break;
+
                 case "QUIT":
                     System.out.println("Thanks for playing!");
                     playing = false;
@@ -167,6 +240,14 @@ public class RoomLoader {
                 default:
                     System.out.println("Unknown command: " + rawInput);
             }
+        }
+    }
+
+    private int parseIntOrDefault(String s, int def) {
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return def;
         }
     }
 }

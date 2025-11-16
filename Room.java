@@ -12,8 +12,16 @@ public class Room {
     private ArrayList<Item> items = new ArrayList<>();
     private Monster monster;
 
-    // Added for puzzle
+    // Added for door puzzle
     private boolean doorPuzzleSolved = false;
+
+    // Added for lever puzzle
+    private boolean leverPuzzleSolved = false;
+    private boolean leverRequiresReset = false;
+    private int leverSeq1 = 0;
+    private int leverSeq2 = 0;
+    private int leverSeq3 = 0;
+    private int leverResetCount = 0;
 
     // Constructor
     public Room(int id, String name, String description) {
@@ -56,12 +64,49 @@ public class Room {
     public void setMonster(Monster m) { monster = m; }
     public void removeMonster() { monster = null; }
 
-    // Added this for puzzle
+    // Door puzzle
     public boolean isDoorPuzzleSolved() {
         return doorPuzzleSolved;
     }
 
     public void setDoorPuzzleSolved(boolean solved) {
         this.doorPuzzleSolved = solved;
+    }
+
+    // Lever puzzle (room 5)
+    public boolean isLeverPuzzleSolved() {
+        return leverPuzzleSolved;
+    }
+
+    public void setLeverPuzzleSolved(boolean solved) {
+        this.leverPuzzleSolved = solved;
+    }
+
+    public boolean isLeverRequiresReset() {
+        return leverRequiresReset;
+    }
+
+    public void setLeverRequiresReset(boolean requiresReset) {
+        this.leverRequiresReset = requiresReset;
+    }
+
+    public void setLeverSequence(int s1, int s2, int s3) {
+        this.leverSeq1 = s1;
+        this.leverSeq2 = s2;
+        this.leverSeq3 = s3;
+    }
+
+    public int getLeverSeq1() { return leverSeq1; }
+    public int getLeverSeq2() { return leverSeq2; }
+    public int getLeverSeq3() { return leverSeq3; }
+
+    public int getLeverResetCount() { return leverResetCount; }
+
+    public void resetLeverPanel() {
+        leverRequiresReset = false;
+        leverSeq1 = 0;
+        leverSeq2 = 0;
+        leverSeq3 = 0;
+        leverResetCount++;
     }
 }

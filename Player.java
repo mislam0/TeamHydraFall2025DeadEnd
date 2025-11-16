@@ -19,7 +19,8 @@ public class Player {
         this.equippedWeapon = null;
         this.equippedArmor = null;
     }
-     // Movement
+
+    // Movement
     public Room move(String direction, Map<Integer, Room> roomMap) {
         Room currentRoom = roomMap.get(currentRoomNumber);
         Integer nextRoomNumber = currentRoom.getExit(direction.toUpperCase());
@@ -47,26 +48,38 @@ public class Player {
         return visitedRooms.contains(roomNumber);
     }
 
-     // Enter Room 
+    // Enter Room 
     public void enterRoom(Room room, Scanner scanner) {
-    if (!room.isVisited()) {
-        System.out.println("\nYou have arrived at " + room.getName() + "... " + room.getDescription());
-        room.visit();
+        if (!room.isVisited()) {
+            System.out.println("\nYou have arrived at " + room.getName() + "... " + room.getDescription());
+            room.visit();
 
-        // Puzzle hint
-        if (room.getId() == 3 && !room.isDoorPuzzleSolved()) {
-            System.out.println("You have found a riddle on a door, say \"Examine Door\" to read it, or \"Answer Door\" to answer the riddle.");
-        }
-        
+            // Puzzle 1 hint (room 3)
+            if (room.getId() == 3 && !room.isDoorPuzzleSolved()) {
+                System.out.println("You have found a riddle on a door, say \"Examine Door\" to read it, or \"Answer Door\" to answer the riddle.");
+            }
+
+            // Puzzle 2 hint (room 5)
+            if (room.getId() == 5 && !room.isLeverPuzzleSolved()) {
+                System.out.println("You see a lever, you can say \"Examine Panel\" to view lever labels and reset status,");
+                System.out.println("or \"Pull Lever\" to pull the lever in 3 sequences (1-5 each), or \"Reset Panel\" to reset the panel.");
+            }
+
         } else {
             System.out.println("\nYou have returned to " + room.getName() + ".");
-        // Puzzle hint
+
+            // Puzzle 1 hint (room 3)
             if (room.getId() == 3 && !room.isDoorPuzzleSolved()) {
-            System.out.println("You have found a riddle on a door, say \"Examine Door\" to read it, or \"Answer Door\" to answer the riddle.");
+                System.out.println("You have found a riddle on a door, say \"Examine Door\" to read it, or \"Answer Door\" to answer the riddle.");
+            }
+
+            // Puzzle 2 hint (room 5)
+            if (room.getId() == 5 && !room.isLeverPuzzleSolved()) {
+                System.out.println("You see a lever, you can say \"Examine Panel\" to view lever labels and reset status,");
+                System.out.println("or \"Pull Lever\" to pull the lever in 3 sequences (1-5 each), or \"Reset Panel\" to reset the panel.");
+            }
         }
     }
-}
-
 
     // Inventory Management
 
@@ -74,11 +87,9 @@ public class Player {
         return inventory;
     }
 
-        public void pickUp(Item item) {
+    public void pickUp(Item item) {
         inventory.add(item);
     }
-
-
 
     public void drop(Item item) {
         inventory.remove(item);
@@ -86,15 +97,10 @@ public class Player {
         if (item == equippedArmor) unequip(item);
     }
 
-
-
     public Item getItemByName(String name) {
         for (Item i : inventory) if (i.getName().equalsIgnoreCase(name)) return i;
         return null;
     }
-
-
-
 
     // Equip / Unequip
     public void equip(Item item) {
@@ -106,12 +112,7 @@ public class Player {
             equippedArmor = item;
             System.out.println(item.getName() + " equipped. Defense increased." + defense());
 
-
-
-
-
-        }
-    else {
+        } else {
             System.out.println("Cannot equip this item.");
         }
     }
@@ -164,8 +165,6 @@ public class Player {
         }
     }
 
-
-
     // Stats
     public int getHp() {
         return hp;
@@ -184,20 +183,8 @@ public class Player {
     }
 
     // Take Damage
-     public void takeDamage(int damage) {
+    public void takeDamage(int damage) {
         hp -= damage ;
         if (hp < 0) hp = 0;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }
