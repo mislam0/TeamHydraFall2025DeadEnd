@@ -9,6 +9,7 @@ public class RoomLoader {
 
     // *** For items, including puzzle rewards ***
     private Map<String, Item> itemMap;
+    
 
     public RoomLoader() {
         roomMap = Roomreader.readRooms("Map.txt");
