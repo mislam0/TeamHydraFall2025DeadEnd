@@ -65,5 +65,17 @@ public class Monster {
                 return 0.0; // Unknown type, no spawn
         }
     }
+    public String monsterTypeDice() {
+        switch (type.toLowerCase()) {
+            case "weak":
+                return "d4"; // Weak monsters use a 4-sided die
+            case "regular":
+                return "d8"; // Regular monsters use an 8-sided die
+            case "boss":
+                return "d12"; // Boss monsters use two 12-sided dice
+            default:
+                return "d4"; // Default to weak if unknown
+        }
+    }
 
 }
