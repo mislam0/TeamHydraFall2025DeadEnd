@@ -31,6 +31,9 @@ public class Room {
     // Added for guardian key lock
     private boolean guardianDoorUnlocked = false;
 
+    // Added for tiles puzzle
+    private boolean tilesPuzzleSolved = false;
+
     // Constructor
     public Room(int id, String name, String description) {
         this.id = id;
@@ -138,12 +141,21 @@ public class Room {
         altarDM4Placed = false;
     }
 
-    // Guardian key door (room 39 -> 40)
+    // Guardian key door
     public boolean isGuardianDoorUnlocked() {
         return guardianDoorUnlocked;
     }
 
     public void setGuardianDoorUnlocked(boolean unlocked) {
         this.guardianDoorUnlocked = unlocked;
+    }
+
+    // Tiles puzzle
+    public boolean isTilesPuzzleSolved() {
+        return tilesPuzzleSolved;
+    }
+
+    public void setTilesPuzzleSolved(boolean solved) {
+        this.tilesPuzzleSolved = solved;
     }
 }

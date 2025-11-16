@@ -81,6 +81,12 @@ public class Player {
                 System.out.println("You can see a deciphering tool.. Use it? Type \"Decipher (word)\" to decipher.");
             }
 
+            // Tiles puzzle hint
+            if (room.getId() == 17 && !room.isTilesPuzzleSolved()) {
+                System.out.println("You see green birds, red turtles and blue marshmallows drawn on one side of the wall.");
+                System.out.println("You then see three colored tiles that can be moved around.. Say \"Move Tiles\" to start moving them.");
+            }
+
         } else {
             System.out.println("\nYou have returned to " + room.getName() + ".");
 
@@ -101,6 +107,12 @@ public class Player {
             }
             if (room.getId() == 12) {
                 System.out.println("You can see a deciphering tool.. Use it? Type \"Decipher (word)\" to decipher.");
+            }
+
+            // Tiles puzzle hint
+            if (room.getId() == 17 && !room.isTilesPuzzleSolved()) {
+                System.out.println("You see green birds, red turtles and blue marshmallows drawn on one side of the wall.");
+                System.out.println("You then see three colored tiles that can be moved around.. Say \"Move Tiles\" to start moving them.");
             }
         }
     }

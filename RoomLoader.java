@@ -300,6 +300,48 @@ public class RoomLoader {
                     }
                     break;
 
+                // Tiles puzzle: Move Tiles
+                case "MOVE":
+                    if (argument.equalsIgnoreCase("tiles")) {
+
+                        if (current.getId() != 17) {
+                            System.out.println("There are no tiles to move here.");
+                            break;
+                        }
+
+                        if (current.isTilesPuzzleSolved()) {
+                            System.out.println("The tiles already seem to be arranged correctly.");
+                            break;
+                        }
+
+                        System.out.println("Where would you like to move the red tile to? (First slot, Second slot, Third slot)");
+                        String red = normalizeSlot(scanner.nextLine().trim());
+
+                        System.out.println("Where would you like to move the blue tile to? (First slot, Second slot, Third slot)");
+                        String blue = normalizeSlot(scanner.nextLine().trim());
+
+                        System.out.println("Where would you like to move the green tile to? (First slot, Second slot, Third slot)");
+                        String green = normalizeSlot(scanner.nextLine().trim());
+
+                        // Correct order: red = second, blue = third, green = first
+                        if ("second".equals(red) && "third".equals(blue) && "first".equals(green)) {
+                            System.out.println("You hear a soft chime as the tiles click into place.");
+                            current.setTilesPuzzleSolved(true);
+
+                            Item reward3 = itemMap.get("DM3"); // small potion
+                            if (reward3 != null) {
+                                player.pickUp(reward3);
+                                System.out.println("You obtained: " + reward3.getName() + "!");
+                            }
+                        } else {
+                            System.out.println("That arrangement feels wrong. Maybe try a different order.");
+                        }
+
+                    } else {
+                        System.out.println("Move what?");
+                    }
+                    break;
+
                 // Altar puzzle: place (item) on altar
                 case "PLACE":
                     if (argument.toLowerCase().endsWith("on altar")) {
@@ -414,5 +456,14 @@ public class RoomLoader {
         } catch (NumberFormatException e) {
             return def;
         }
+    }
+
+    // Helper for tile positions: accepts "first", "first slot", etc.
+    private String normalizeSlot(String s) {
+        String t = s.toLowerCase();
+        if (t.startsWith("first")) return "first";
+        if (t.startsWith("second")) return "second";
+        if (t.startsWith("third")) return "third";
+        return t;
     }
 }
