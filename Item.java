@@ -73,5 +73,6 @@ public class Item {
 
      public boolean isConsumable() { return "health".equalsIgnoreCase(type) && healing > 0; }
     public boolean isWeapon() { return "weapon".equalsIgnoreCase(type); }
-    public boolean isEquipable() { return isWeapon() || "defense".equalsIgnoreCase(type); }
+    public boolean isArmor() { return "defense".equalsIgnoreCase(type); }
+    public boolean isEquipable() { return isWeapon() || isArmor(); }
 }

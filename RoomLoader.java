@@ -32,7 +32,7 @@ public class RoomLoader {
             System.out.println("\nAvailable exits: [" +
                     String.join(", ", current.getExits().keySet()) + "]");
 
-            System.out.print("Enter command (Quit or direction): ");
+            System.out.print("Enter command (Quit, Direction, or Help): ");
             String rawInput = scanner.nextLine().trim();
             String[] tokens = rawInput.split(" ", 2);
             String command = tokens[0].toUpperCase();
@@ -83,6 +83,12 @@ public class RoomLoader {
                 case "EQUIP":
                     Item equipItem = player.getItemByName(argument);
                     if (equipItem != null) player.equip(equipItem);
+                    else System.out.println("Item not in inventory.");
+                    break;
+
+                case "UNEQUIP":
+                    Item unequipItem = player.getItemByName(argument);
+                    if (unequipItem != null) player.unequip(unequipItem);
                     else System.out.println("Item not in inventory.");
                     break;
 

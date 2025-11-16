@@ -5,7 +5,8 @@ public class Player {
     private Set<Integer> visitedRooms;
     private int hp;
     private List<Item> inventory;
-    private Item equippedItem;
+    private Item equippedWeapon;
+    private Item equippedArmor;
     private int baseAttackDamage;
    
     public Player(){
@@ -15,7 +16,8 @@ public class Player {
         this.hp = 100;
         this.baseAttackDamage = 0;
         this.inventory = new ArrayList<>();
-        this.equippedItem = null;
+        this.equippedWeapon = null;
+        this.equippedArmor = null;
     }
      // Movement
     public Room move(String direction, Map<Integer, Room> roomMap) {
@@ -70,7 +72,8 @@ public class Player {
 
     public void drop(Item item) {
         inventory.remove(item);
-        if (item == equippedItem) unequip();
+        if (item == equippedWeapon) unequip(item);
+        if (item == equippedArmor) unequip(item);
     }
 
 
@@ -85,10 +88,13 @@ public class Player {
 
     // Equip / Unequip
     public void equip(Item item) {
-        if (item.isEquipable() && inventory.contains(item) && equippedItem.getType().equalsIgnoreCase("weapon")) {
-            equippedItem = item;
+        if (item.isEquipable() && inventory.contains(item) && item.isWeapon()) {
+            equippedWeapon = item;
             System.out.println(item.getName() + " equipped. Attack damage: " + attackDamage());
-        } else if (item.isEquipable() && inventory.contains(item) && equippedItem.getType().equalsIgnoreCase("defense")) {
+
+        } else if (item.isEquipable() && inventory.contains(item) && item.isArmor()) {
+            equippedArmor = item;
+            System.out.println(item.getName() + " equipped. Defense increased." + defense());
 
 
 
@@ -100,10 +106,13 @@ public class Player {
         }
     }
 
-    public void unequip() {
-        if (equippedItem != null) {
-            System.out.println(equippedItem.getName() + " unequipped.");
-            equippedItem = null;
+    public void unequip(Item item) {
+        if (equippedWeapon != null) {
+            System.out.println(equippedWeapon.getName() + " unequipped.");
+            equippedWeapon = null;
+        } else if (equippedArmor != null) {
+            System.out.println(equippedArmor.getName() + " unequipped.");
+            equippedArmor = null;
         } else {
             System.out.println("No item equipped.");
         }
@@ -123,21 +132,23 @@ public class Player {
     public void help() {
         System.out.println(
         "Available commands:\n"+
-        "> MOVE <direction>: moves the player in the specified direction (NORTH, SOUTH, EAST, WEST)\n" +
+        "> MOVE <direction>: moves the player in the specified direction (NORTH, EAST, SOUTH, WEST)\n" +
         "> EXPLORE: lists items in the room \n" + 
         "> PICKUP <item>: picks up an item from the room, \n" + 
         "> DROP <item>: drops an item into the room, \n" + 
         "> INSPECT <item>: shows item description, \n" + 
         "> EQUIP <item>: equips an item, \n" +
+        "> UNEQUIP <item>: unequips an item, \n" +
         "> HEAL <item>: uses a healing item, \n" +
         "> INVENTORY: lists items in inventory, \n" +
+        "> STATUS: shows player status, \n" +
         "> QUIT: exits the game.");
     }
 
     public void printStatus() {
         System.out.println("Player HP: " + hp);
-        if (equippedItem != null) {
-            System.out.println("Equipped Item: " + equippedItem.getName() + " (Damage: " + equippedItem.getDamage() + ")");
+        if (equippedWeapon != null) {
+            System.out.println("Equipped Item: " + equippedWeapon.getName() + " (Damage: " + equippedWeapon.getDamage() + ")");
         } else {
             System.out.println("No item equipped.");
         }
@@ -151,7 +162,11 @@ public class Player {
     }
 
     public int attackDamage() {
-        return equippedItem != null ? equippedItem.getDamage() : baseAttackDamage;
+        return equippedWeapon != null ? equippedWeapon.getDamage() : baseAttackDamage;
+    }
+
+    public int defense() {
+        return equippedArmor != null ? (int) equippedArmor.getArmor() : 0;
     }
 
     public boolean isAlive() {
