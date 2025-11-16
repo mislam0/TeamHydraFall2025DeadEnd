@@ -4,6 +4,9 @@ public class Player {
     // Room tracking
     private int currentRoomNumber;
     private Set<Integer> visitedRooms;
+    // Current room
+    
+    
 
     // Player stats
     private int hp;
@@ -97,7 +100,13 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
     }
 
         public void pickUp(Item item) {
+            if (inventory.size() >= MAX_INVENTORY_SIZE) {
+                System.out.println("Inventory full. Cannot pick up " + item.getName() + ".");
+                return;
+            } else {
         inventory.add(item);
+        System.out.println("Picked up " + item.getName() + ".");
+            }
     }
 
 
@@ -201,7 +210,13 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
         }else {
             System.out.println("No item equipped.");
         }
-    }
+        if (inventory.isEmpty()) {
+            System.out.println(MAX_INVENTORY_SIZE + " slots left");
+        } else {
+            System.out.println("Inventory (" + inventory.size() + "/" + MAX_INVENTORY_SIZE + "):");
+            }
+        }
+
 
 
 
@@ -248,6 +263,7 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
 
 public int monsterAttackDamageWithDice(Monster monster) {
     Dice dice = new Dice();
+    int totalDamage = 0;
     if (monster != null) {
         int base = monster.getDamage();
         String diceType = monster.monsterTypeDice();
@@ -261,10 +277,16 @@ public int monsterAttackDamageWithDice(Monster monster) {
             }
         }
 
-        int totalDamage = base + diceRoll;
-
-        if (diceRoll > 0) {
-            System.out.println(monster.getName() + " attacks (rolled " + diceRoll + ") for " + totalDamage + " damage!");
+        if (dice.rollIsMax(diceRoll, diceType.equals("d4") ? 4 : diceType.equals("d8") ? 8 : 12)) {
+            totalDamage = (base + diceRoll) * 2;
+            System.out.println("Critical hit by " + monster.getName() + "!");
+            System.out.println(monster.getName() + " attacks (rolled " + diceRoll + ") for a Staggering " + totalDamage + " damage!");
+        
+        }
+            else if (!dice.rollIsMax(diceRoll, diceType.equals("d4") ? 4 : diceType.equals("d8") ? 8 : 12) && diceRoll > 0) {
+        totalDamage = base + diceRoll;
+        System.out.println(monster.getName() + " attacks (rolled " + diceRoll + ") for " + totalDamage + " damage!");
+            
         } else {
             System.out.println(monster.getName() + " attacks for " + totalDamage + " damage!");
         }
@@ -347,6 +369,8 @@ public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> ro
                 System.out.println("Type: " + monster.getType());
                 System.out.println("HP: " + monster.getHitPoints());
                 System.out.println("Damage: " + monster.getDamage());
+                System.out.println("Dice Type: " + monster.monsterTypeDice());
+                
                
                 break;
 
@@ -354,7 +378,7 @@ public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> ro
             case "2":
             case "ATTACK":
     int playerDamage = attackDamageWithDice();
-    if (playerDamage <= 0) {
+    if (playerDamage <= 0 || (monster.getId().equals("M8") && !equippedWeapon.getId().equals("DM8"))) {
         System.out.println("You strike but deal no damage.");
     } else {
         monster.takeDamage(playerDamage);
@@ -365,7 +389,7 @@ public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> ro
         // Monster attacks back
         int monsterDamage = (int) (monsterAttackDamageWithDice(monster) * (1 - defense()));
         takeDamage(monsterDamage);
-        System.out.println(monster.getName() + " hits you for " + monsterDamage + " damage!");
+        
         if (!isAlive()) {
             handlePlayerDeath();
             return; // exit game
@@ -390,10 +414,10 @@ public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> ro
             System.out.println("You obtained a health restoration item: " + drop.getName()+"\n" +"You healed " + (hp - starthp) +"HP" +"\n" +"Your HP is now " + hp + "!");
 
         }
-        // If boss defeated, end game
-        if (monster.getType().equalsIgnoreCase("Boss")) {
-            System.out.println("Congratulations! You have defeated the Boss and completed the game!");
-            System.exit(0);
+        // If boss defeated print message
+        if (monster.getType().equalsIgnoreCase("Boss") && monster.getId().equalsIgnoreCase("M7")) {
+            System.out.println("Congratulations! You have defeated the Boss!");
+
         }
         // Only set combat false here
         setInCombat(false);
@@ -446,6 +470,9 @@ public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> ro
                         Room next = move(chosenDir, roomMap);
                         if (next != null) {
                             System.out.println("You run " + chosenDir + " to " + next.getName() + ".");
+                            enterRoom(next, scanner, roomMap);
+                            
+                            
                         } else {
                             System.out.println("You couldn't find a way out and remain in the same room.");
                         }
@@ -472,6 +499,21 @@ public void handleCombat(Monster monster, Scanner scanner, Map<Integer, Room> ro
                 System.out.println("Invalid choice. Please select a valid action.");
                } 
         }
+    
     }
+    // Method for ending if certain boss is defeated
+    public void handleGameWin(Map<Integer, Room> roomMap){
+        Room currentRoom = roomMap.get(currentRoomNumber);
+        if (currentRoom.getId() == 22 && !currentRoom.hasMonster()) {
+            System.out.println("Dead End Ending");
+            System.exit(0);
+            
+        }
+        if (currentRoom.getId() == 2 && !currentRoom.hasMonster()) {
+            System.out.println("Freedom Ending");
+            System.exit(0);
+            
+        }
+    } 
 }
 

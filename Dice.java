@@ -2,6 +2,9 @@ import java.util.Random;
 
 public class Dice {
     private Random random;
+    private boolean isMaxRoll;
+
+    
 
     public Dice() {
         random = new Random();
@@ -13,6 +16,9 @@ public class Dice {
             throw new IllegalArgumentException("Dice must have at least 2 sides");
         }
         return random.nextInt(sides) + 1; // random.nextInt(n) gives 0 to n-1
+    }
+    public boolean rollIsMax(int roll, int sides) {
+        return roll == sides;
     }
 
     // Convenience methods for specific dice
@@ -41,6 +47,9 @@ public int rollDice(String notation) {
     // handle formats like "d6"
     if (notation.startsWith("d")) {
         int sides = Integer.parseInt(notation.substring(1));
+        if (sides == 4 || sides == 8 || sides == 12) {
+            isMaxRoll = true;
+        }
         return roll(sides);
     }
 
@@ -59,6 +68,14 @@ public int rollDice(String notation) {
 
     throw new IllegalArgumentException("Invalid dice notation: " + notation);
 }
+
+public boolean isMaxRoll() {
+        return isMaxRoll;
+    }
+
+    public void setMaxRoll(boolean isMaxRoll) {
+        this.isMaxRoll = isMaxRoll;
+    }
 
 
 

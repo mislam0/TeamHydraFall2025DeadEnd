@@ -23,6 +23,7 @@ public class Monster {
     }
 
     // Getters
+    public String getId() { return id; }
     public String getName() { return name; }
     public String getDescription() { return description; }
     public int getHitPoints() { return hitPoints; }
@@ -30,6 +31,7 @@ public class Monster {
     public String getType() { return type; }
     public void setRoom(Room room) { this.room = room; }
     public Room getRoom() { return room; }
+    public double getSpawnChance() { return spawnChance; }
 
     // Check if alive
     public boolean isAlive() { return hitPoints > 0; }

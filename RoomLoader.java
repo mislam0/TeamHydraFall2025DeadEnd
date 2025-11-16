@@ -51,6 +51,7 @@ public class RoomLoader {
                         player.enterRoom(current, scanner, roomMap);
                        
                     }
+                    player.handleGameWin(roomMap);
                     break;
 
                     case "EXPLORE":
@@ -63,7 +64,7 @@ public class RoomLoader {
                     if (toPick != null) {
                         player.pickUp(toPick);
                         current.removeItem(toPick);
-                        System.out.println("Picked up " + toPick.getName());
+                        
                     } else System.out.println("Item not found.");
                     break;
 
