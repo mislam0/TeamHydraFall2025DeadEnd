@@ -87,6 +87,14 @@ public class Player {
                 System.out.println("You then see three colored tiles that can be moved around.. Say \"Move Tiles\" to start moving them.");
             }
 
+            // Statues puzzle hint
+            if (room.getId() == 18 && !room.isStatuesPuzzleSolved()) {
+                System.out.println("You see three statues, they seem to be slightly aligned towards the entrance to this room,");
+                System.out.println("almost as if they're staring at you. Maybe you can move them..?");
+                System.out.println("Type \"Inspect statue\" to see the directions of the statue currently,");
+                System.out.println("or type \"Set statue direction\" to change the direction of the statues in order from left to right.");
+            }
+
         } else {
             System.out.println("\nYou have returned to " + room.getName() + ".");
 
@@ -113,6 +121,14 @@ public class Player {
             if (room.getId() == 17 && !room.isTilesPuzzleSolved()) {
                 System.out.println("You see green birds, red turtles and blue marshmallows drawn on one side of the wall.");
                 System.out.println("You then see three colored tiles that can be moved around.. Say \"Move Tiles\" to start moving them.");
+            }
+
+            // Statues puzzle hint
+            if (room.getId() == 18 && !room.isStatuesPuzzleSolved()) {
+                System.out.println("You see three statues, they seem to be slightly aligned towards the entrance to this room,");
+                System.out.println("almost as if they're staring at you. Maybe you can move them..?");
+                System.out.println("Type \"Inspect statue\" to see the directions of the statue currently,");
+                System.out.println("or type \"Set statue direction\" to change the direction of the statues in order from left to right.");
             }
         }
     }

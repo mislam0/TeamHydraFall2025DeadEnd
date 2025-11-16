@@ -34,6 +34,12 @@ public class Room {
     // Added for tiles puzzle
     private boolean tilesPuzzleSolved = false;
 
+    // Added for statues puzzle
+    private boolean statuesPuzzleSolved = false;
+    private String statueDir1 = "NORTH";
+    private String statueDir2 = "NORTH";
+    private String statueDir3 = "NORTH";
+
     // Constructor
     public Room(int id, String name, String description) {
         this.id = id;
@@ -157,5 +163,24 @@ public class Room {
 
     public void setTilesPuzzleSolved(boolean solved) {
         this.tilesPuzzleSolved = solved;
+    }
+
+    // Statues puzzle
+    public boolean isStatuesPuzzleSolved() {
+        return statuesPuzzleSolved;
+    }
+
+    public void setStatuesPuzzleSolved(boolean solved) {
+        this.statuesPuzzleSolved = solved;
+    }
+
+    public String getStatueDir1() { return statueDir1; }
+    public String getStatueDir2() { return statueDir2; }
+    public String getStatueDir3() { return statueDir3; }
+
+    public void setStatueDirections(String d1, String d2, String d3) {
+        this.statueDir1 = d1;
+        this.statueDir2 = d2;
+        this.statueDir3 = d3;
     }
 }

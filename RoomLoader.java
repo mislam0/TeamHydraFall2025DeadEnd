@@ -90,9 +90,20 @@ public class RoomLoader {
                     break;
 
                 case "INSPECT":
-                    Item toInspect = player.getItemByName(argument);
-                    if (toInspect != null) System.out.println(toInspect.getDescription());
-                    else System.out.println("Item not in inventory.");
+                    // New: statue inspect in room 18
+                    if (argument.equalsIgnoreCase("statue")) {
+                        if (current.getId() == 18) {
+                            System.out.println("The left statue faces " + current.getStatueDir1() + ".");
+                            System.out.println("The middle statue faces " + current.getStatueDir2() + ".");
+                            System.out.println("The right statue faces " + current.getStatueDir3() + ".");
+                        } else {
+                            System.out.println("There is no statue to inspect here.");
+                        }
+                    } else {
+                        Item toInspect = player.getItemByName(argument);
+                        if (toInspect != null) System.out.println(toInspect.getDescription());
+                        else System.out.println("Item not in inventory.");
+                    }
                     break;
 
                 case "EQUIP":
@@ -342,6 +353,50 @@ public class RoomLoader {
                     }
                     break;
 
+                // Statues puzzle: Set statue direction
+                case "SET":
+                    if (argument.equalsIgnoreCase("statue direction")) {
+
+                        if (current.getId() != 18) {
+                            System.out.println("There are no statues to set here.");
+                            break;
+                        }
+
+                        if (current.isStatuesPuzzleSolved()) {
+                            System.out.println("The statues already seem perfectly aligned.");
+                            break;
+                        }
+
+                        System.out.println("Set first statues' direction to? (North, East, South, West)");
+                        String d1 = normalizeDirection(scanner.nextLine().trim());
+
+                        System.out.println("Set second statues' direction to? (North, East, South, West)");
+                        String d2 = normalizeDirection(scanner.nextLine().trim());
+
+                        System.out.println("Set third statues' direction to? (North, East, South, West)");
+                        String d3 = normalizeDirection(scanner.nextLine().trim());
+
+                        current.setStatueDirections(d1, d2, d3);
+
+                        // Correct order: North, West, South
+                        if ("NORTH".equals(d1) && "WEST".equals(d2) && "SOUTH".equals(d3)) {
+                            System.out.println("You hear grinding stone as the statues lock into place.");
+                            current.setStatuesPuzzleSolved(true);
+
+                            Item reward4 = itemMap.get("DM4"); // Spirit Essence
+                            if (reward4 != null) {
+                                player.pickUp(reward4);
+                                System.out.println("You obtained: " + reward4.getName() + "!");
+                            }
+                        } else {
+                            System.out.println("Nothing seems to happen.");
+                        }
+
+                    } else {
+                        System.out.println("Set what?");
+                    }
+                    break;
+
                 // Altar puzzle: place (item) on altar
                 case "PLACE":
                     if (argument.toLowerCase().endsWith("on altar")) {
@@ -465,5 +520,15 @@ public class RoomLoader {
         if (t.startsWith("second")) return "second";
         if (t.startsWith("third")) return "third";
         return t;
+    }
+
+    // Helper for statue directions: accepts "north", "n", etc.
+    private String normalizeDirection(String s) {
+        String t = s.trim().toLowerCase();
+        if (t.startsWith("n")) return "NORTH";
+        if (t.startsWith("e")) return "EAST";
+        if (t.startsWith("s")) return "SOUTH";
+        if (t.startsWith("w")) return "WEST";
+        return t.toUpperCase();
     }
 }
