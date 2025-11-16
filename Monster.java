@@ -6,7 +6,9 @@ public class Monster {
     private int damage;
     private String type; // Weak, Regular, Boss
     private Item droppedItem;
-    private Room room; // The room where the monster is located
+    private Room room;
+    private double spawnChance;
+     // The room where the monster is located
 
     // Constructor
     public Monster(String id, String name, String description, int hitPoints, int damage, String type, Item droppedItem) {
@@ -31,7 +33,8 @@ public class Monster {
 
     // Check if alive
     public boolean isAlive() { return hitPoints > 0; }
-
+    //
+    
     // Receive damage
     public void takeDamage(int amount) {
         hitPoints -= amount;
@@ -50,4 +53,17 @@ public class Monster {
         }
         return droppedItem;
     }
+    public double spawnChance() {
+        switch (type.toLowerCase()) {
+            case "weak":
+                return 0.95; // 95% chance to spawn
+            case "regular":
+                return 0.80; // 80% chance to spawn
+            case "boss":
+                return 1.0; // 100% chance to spawn
+            default:
+                return 0.0; // Unknown type, no spawn
+        }
+    }
+
 }
