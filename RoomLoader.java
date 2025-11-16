@@ -49,6 +49,16 @@ public class RoomLoader {
                 case "SOUTH":
                 case "EAST":
                 case "WEST":
+
+                    // Guardian Key lock: room 39 -> 40 (south)
+                    if (command.equals("SOUTH") && current.getId() == 39) {
+                        Integer targetRoom = current.getExit("SOUTH");
+                        if (targetRoom != null && targetRoom == 40 && !current.isGuardianDoorUnlocked()) {
+                            System.out.println("You need Guardian Key to proceed. Would you like to use it? Enter \"Use guardian key\" to proceed.");
+                            break; // do not move
+                        }
+                    }
+
                     Room next = player.move(command, roomMap);
                     if (next != null) {
                         current = next;
@@ -256,6 +266,37 @@ public class RoomLoader {
                     } 
                     else {
                         System.out.println("Reset what?");
+                    }
+                    break;
+
+                // Use guardian key
+                case "USE":
+                    if (argument.equalsIgnoreCase("guardian key")) {
+
+                        if (current.getId() == 39) {
+
+                            Item guardianKey = null;
+                            for (Item it : player.getInventory()) {
+                                if ("DM6".equalsIgnoreCase(it.getId())) {
+                                    guardianKey = it;
+                                    break;
+                                }
+                            }
+
+                            if (guardianKey != null) {
+                                System.out.println("You use the Guardian Key. The way south is now open.");
+                                current.setGuardianDoorUnlocked(true);
+                                // Key is not consumed unless you want it to be
+                            } else {
+                                System.out.println("You don't have the Guardian Key.");
+                            }
+
+                        } else {
+                            System.out.println("You can't use that here.");
+                        }
+
+                    } else {
+                        System.out.println("Use what?");
                     }
                     break;
 

@@ -28,6 +28,9 @@ public class Room {
     private boolean altarDM1Placed = false;
     private boolean altarDM4Placed = false;
 
+    // Added for guardian key lock
+    private boolean guardianDoorUnlocked = false;
+
     // Constructor
     public Room(int id, String name, String description) {
         this.id = id;
@@ -133,5 +136,14 @@ public class Room {
     public void resetAltar() {
         altarDM1Placed = false;
         altarDM4Placed = false;
+    }
+
+    // Guardian key door (room 39 -> 40)
+    public boolean isGuardianDoorUnlocked() {
+        return guardianDoorUnlocked;
+    }
+
+    public void setGuardianDoorUnlocked(boolean unlocked) {
+        this.guardianDoorUnlocked = unlocked;
     }
 }
