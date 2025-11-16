@@ -2,7 +2,7 @@ import java.util.*;
 
 public class RoomLoader {
     private List<Room> rooms;
-    private Map<Integer, Room> roomMap;
+    public Map<Integer, Room> roomMap;
     private Player player;
     
 
@@ -24,6 +24,7 @@ public class RoomLoader {
 
         Room current = roomMap.get(player.getCurrentRoomNumber());
         player.enterRoom(current, scanner);
+        
 
         boolean playing = true;
 
@@ -48,6 +49,7 @@ public class RoomLoader {
                     if (next != null) {
                         current = next;
                         player.enterRoom(current, scanner);
+                       
                     }
                     break;
 
@@ -119,6 +121,27 @@ public class RoomLoader {
 
                 default:
                     System.out.println("Unknown command: " + rawInput);
+            }
+
+            private void checkForMonsterAndCombat(Room room, Scanner scanner) {
+                if (room == null) return;
+                if (room.hasMonster() && room.getMonster().isAlive()) {
+                    // Start combat. Player.handleCombat is expected to manage combat loop and may
+                    // move the player (on successful escape) or remove the monster when defeated.
+                    player.handleCombat(room.getMonster(), scanner, roomMap);
+        
+                    // After combat returns, sync the "room" in case the player ran to another room
+                    Room updated = roomMap.get(player.getCurrentRoomNumber());
+                    if (updated != null && updated != room) {
+                        // If the player moved rooms during combat, describe the new room
+                        player.enterRoom(updated, scanner);
+        
+                        // If the new room also has a monster, start combat there as well
+                        if (updated.hasMonster() && updated.getMonster().isAlive()) {
+                            player.handleCombat(updated.getMonster(), scanner, roomMap);
+                        }
+                    }
+                }
             }
         }
     }
