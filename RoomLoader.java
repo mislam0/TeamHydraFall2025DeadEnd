@@ -2,15 +2,26 @@ import java.util.*;
 
 public class RoomLoader {
     private List<Room> rooms;
+<<<<<<< HEAD
     private Map<Integer, Room> roomMap;
     private Map<String, Item> itemMap;
 
+=======
+    public Map<Integer, Room> roomMap;
+>>>>>>> 94f7c2d2e71ff7e61f42724a3fe7df2c3ef2abca
     private Player player;
+    
 
     public RoomLoader() {
         roomMap = Roomreader.readRooms("Map.txt");
+<<<<<<< HEAD
         Itemreader.loadItems("Items.txt", roomMap);
         Monsterreader.loadMonsters("Monsters.txt", roomMap, itemMap);
+=======
+        Map<String, Item> itemMap = Itemreader.loadItems("Items.txt", roomMap);
+        MonsterReader.loadMonsters("Monsters.txt", roomMap, itemMap);
+
+>>>>>>> 94f7c2d2e71ff7e61f42724a3fe7df2c3ef2abca
         rooms = new ArrayList<>(roomMap.values());
     }
 
@@ -23,7 +34,8 @@ public class RoomLoader {
         this.player = player;
 
         Room current = roomMap.get(player.getCurrentRoomNumber());
-        player.enterRoom(current, scanner);
+        player.enterRoom(current, scanner, roomMap);
+        
 
         boolean playing = true;
 
@@ -47,7 +59,8 @@ public class RoomLoader {
                     Room next = player.move(command, roomMap);
                     if (next != null) {
                         current = next;
-                        player.enterRoom(current, scanner);
+                        player.enterRoom(current, scanner, roomMap);
+                       
                     }
                     break;
 
@@ -92,7 +105,11 @@ public class RoomLoader {
                     else System.out.println("Item not in inventory.");
                     break;
 
+<<<<<<< HEAD
                     case "USE":
+=======
+                    case "HEAL":
+>>>>>>> 94f7c2d2e71ff7e61f42724a3fe7df2c3ef2abca
                     Item healItem = player.getItemByName(argument);
                     if (healItem != null) player.heal(healItem);
                     else System.out.println("Item not in inventory or cannot heal.");
@@ -119,7 +136,10 @@ public class RoomLoader {
 
                 default:
                     System.out.println("Unknown command: " + rawInput);
+                }
             }
         }
     }
-}
+    
+
+        

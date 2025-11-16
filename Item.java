@@ -13,6 +13,7 @@ public class Item {
     private final String rarity;
 
 
+<<<<<<< HEAD
 
 
 
@@ -20,6 +21,8 @@ public class Item {
 
     
 
+=======
+>>>>>>> 94f7c2d2e71ff7e61f42724a3fe7df2c3ef2abca
     public Item(String id, String name, String description, String type, int hp, int damage, double armor, String dice, String rarity) {
         this.id = id;
         this.name = name;
