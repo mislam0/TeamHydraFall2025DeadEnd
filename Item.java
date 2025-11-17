@@ -1,3 +1,7 @@
+/* 
+ * Authors: Taylor
+ */
+
 import java.util.ArrayList;
 
 public class Item {

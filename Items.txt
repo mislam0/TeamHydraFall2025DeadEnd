@@ -1,3 +1,4 @@
+# Author: Taylor
 # id|name|description|category|hp|damage|armor|dice|rarity|roomID
 DM1|Scale Fragment|A hardened monster scale. When carried, it reduces incoming damage slightly, as if shielding the player with residual magic.|Defense|-|-|0.10|-|Epic|-
 DM2|Health Restoration|Restores a small amount of health. A basic healing item often found after defeating weaker monsters.|Restore|10|-|-|-|Uncommon|-

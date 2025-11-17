@@ -1,30 +1,7 @@
 /*
- * GameSerializer.java
- *
- * Save / Load the full game state to a key/value text file (via SaveManager).
- *
- * This class attempts to fully capture:
- *  - Player state: current room, hp, inCombat, inventory (by item name), equipped items
- *  - Rooms: visited flag, items in each room, monster assignment in each room, and all puzzle boolean flags/fields that Room exposes
- *  - Monsters: hitPoints (so killed/partially damaged monsters are restored) and dropped item identity
- *
- * Notes about IDs/resolution:
- *  - Items are referenced by name. Build a Map<String, Item> itemByName at startup (e.g., from Itemreader).
- *    Names must be unique; if you prefer IDs, adapt accordingly.
- *  - Monsters are referenced by an identifier. This serializer will try to use a monkey-patched id field (reflection) if present,
- *    otherwise it falls back to the monster name as key. Provide a monstersById map at runtime where keys match the identifier used.
- *
- * Reflection:
- *  - Player.hp and Monster.hitPoints are private in the code snapshot. The serializer first attempts to call a public setter (setHp, setHitPoints),
- *    if present; otherwise it uses reflection to set the fields. You can avoid reflection by adding public setters to Player and Monster.
- *
- * Usage:
- *   Map<String,String> state = GameSerializer.serialize(player, roomMap, itemByName, monstersById);
- *   SaveManager.save("save1", state);
- *
- *   Map<String,String> loaded = SaveManager.load("save1");
- *   GameSerializer.deserialize(loaded, player, roomMap, itemByName, monstersById);
+ * Authors: Rahsun and Mohammed
  */
+
 import java.util.*;
 import java.lang.reflect.*;
 

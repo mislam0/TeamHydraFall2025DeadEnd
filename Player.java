@@ -1,3 +1,7 @@
+/* 
+ * Authors: Team Hydra (David, Mohammed, Taylor, Rahsun)
+ */
+
 import java.util.*;
 
 public class Player {

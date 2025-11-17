@@ -1,3 +1,4 @@
+# Author: Taylor and Rahsun
 # id|name|description|health|damage|type|drops|id
 M1|Cave Crawler|A skittering insect-like creature that swarms in dark corners of the cave.|3|5|Weak|DM2|8
 M2|Rustfang Rat|A giant rat with glowing eyes and sharp, rust-colored teeth.|5|10|Weak|DM3|13

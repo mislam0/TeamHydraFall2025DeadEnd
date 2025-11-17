@@ -1,3 +1,7 @@
+/* 
+ * Authors: Taylor and Rahsun
+ */
+
 import java.io.*;
 import java.util.*;
 

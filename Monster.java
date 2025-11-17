@@ -1,3 +1,7 @@
+/* 
+ * Authors: Taylor and Rahsun
+ */
+
 public class Monster {
     private String id;
     private String name;

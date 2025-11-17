@@ -1,3 +1,4 @@
+# Authors: David and Mohammed
 # id|name|description|N|E|S|W
 1|Your Cell|You're in a small cell. There is nothing in the room except you.|0|2|0|0
 2|Next Cell|You're in a small cell. You notice the door is opened to the south.|0|0|3|1

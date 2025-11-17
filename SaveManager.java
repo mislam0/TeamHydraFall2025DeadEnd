@@ -1,14 +1,7 @@
 /*
- * SaveManager.java
- *
- * Simple text-based save/load manager.
- * Saves are stored in ./saves/<filename>.txt by default.
- *
- * File format: key=value lines. Lines starting with '#' or empty are ignored.
- * Basic escaping for backslash, equals and newline is supported.
- *
- * Extra utilities: list saves, delete save, check existence.
+ * Authors: Rahsun and Mohammed
  */
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
