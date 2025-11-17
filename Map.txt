@@ -3,7 +3,7 @@
 2|Next Cell|You're in a small cell. You notice the door is opened to the south.|0|0|3|1
 3|Cell Hall|You are in the cell hall, you see nothing but dust.|2|4|0|0
 4|Crypts Beginnings|You are now in a room that has seen better days. There is nothing here for you.|0|5|0|3
-5|Think|The room you are in doesn’t seem unusual.|6|7|0|4
+5|Think|The room you are in doesn't seem unusual.|6|7|0|4
 6|Secret Room 1|Walking through a small corridor, you find a hidden room.|0|0|5|0
 7|Whispering Winds|There are many cracks in the wall. You think you can hear something.|0|8|20|5
 8|Guarding Treasure|Bones scattered around, and it reeks of dried blood.|0|9|0|7
@@ -11,7 +11,7 @@
 10|Useful|The walls are smooth and pillars surround a pedestal.|9|0|0|0
 11|Puzzling|Walls are etched with strange marks. It looks confusing.|12|0|0|9
 12|Stone Walls|Solid stone walls surround you. Claustrophobic.|14|0|11|13
-13|Beast’s Lair|Shadows twist unnaturally along the walls.|0|12|0|0
+13|Beast's Lair|Shadows twist unnaturally along the walls.|0|12|0|0
 14|Dingy Hallway|Cobwebs cover broken stone.|15|0|12|0
 15|Sealed Room|Glowing mushrooms cast eerie light.|0|16|0|14
 16|Dusty Chamber|Dust curls along the floor.|0|18|17|15
