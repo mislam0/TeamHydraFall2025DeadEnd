@@ -240,7 +240,7 @@ public void enterRoom(Room room, Scanner scanner, Map<Integer, Room> roomMap) {
     public void help() {
         System.out.println(
         "Available commands:\n"+
-        "> MOVE <direction>: moves the player in the specified direction (NORTH, EAST, SOUTH, WEST)\n" +
+        "> <direction>: moves the player in the specified direction (NORTH, EAST, SOUTH, WEST)\n" +
         "> EXPLORE: lists items in the room \n" + 
         "> PICKUP <item>: picks up an item from the room, \n" + 
         "> DROP <item>: drops an item into the room, \n" + 
