@@ -1,5 +1,5 @@
 /* 
- * Authors: David and Mohammed
+ *Authors: David and Mohammed
  */
 
 import java.io.IOException;
@@ -42,6 +42,7 @@ public class RoomLoader {
 
         Room current = roomMap.get(player.getCurrentRoomNumber());
         player.enterRoom(current, scanner, roomMap);
+        player.enterRoom(current, scanner);
         
 
         boolean playing = true;
@@ -77,7 +78,7 @@ public class RoomLoader {
                     if (next != null) {
                         current = next;
                         player.enterRoom(current, scanner, roomMap);
-                       
+                        player.enterRoom(current, scanner);
                     }
                     player.handleGameWin(roomMap);
                     break;
