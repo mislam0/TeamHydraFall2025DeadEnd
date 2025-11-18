@@ -61,7 +61,7 @@ Movement & Exploration
 DIRECTION
    Move to an adjacent room in the given direction.
    Valid directions: NORTH, EAST, SOUTH, WEST
-   Example: MOVE NORTH
+   Example: NORTH
 
 EXPLORE
    Lists any items currently visible in the room.
