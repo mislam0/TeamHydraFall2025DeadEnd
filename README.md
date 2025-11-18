@@ -58,7 +58,7 @@ These are the general commands shown by the in-game HELP command.
 Movement & Exploration
 --------------------
 
-MOVE <direction>
+<direction>
    Move to an adjacent room in the given direction.
    Valid directions: NORTH, EAST, SOUTH, WEST
    Example: MOVE NORTH
