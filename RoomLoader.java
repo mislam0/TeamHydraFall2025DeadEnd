@@ -47,7 +47,7 @@ public class RoomLoader {
 
         while (playing) {
 
-            // TRYING THIS RN WHILST IN CALL: Keep 'current' in sync with where the player actually is
+            // Keep 'current' in sync with where the player actually is
             Room playerRoom = roomMap.get(player.getCurrentRoomNumber());
             if (playerRoom != null) {
                 current = playerRoom;
@@ -140,9 +140,40 @@ public class RoomLoader {
                     break;
 
                 case "USE":
-                    Item healItem = player.getItemByName(argument);
-                    if (healItem != null) player.heal(healItem);
-                    else System.out.println("Item not in inventory or cannot heal.");
+                    // Special case: "use guardian key" for the Last Gate (room 39)
+                    if (argument.equalsIgnoreCase("guardian key")) {
+
+                        if (current.getId() == 39) {
+
+                            Item guardianKey = null;
+                            for (Item it : player.getInventory()) {
+                                if ("DM6".equalsIgnoreCase(it.getId())) {
+                                    guardianKey = it;
+                                    break;
+                                }
+                            }
+
+                            if (guardianKey != null) {
+                                System.out.println("You use the Guardian Key. The way south is now open.");
+                                current.setGuardianDoorUnlocked(true);
+                                // Consume the key if you ever want that behaviour
+                            } else {
+                                System.out.println("You don't have the Guardian Key.");
+                            }
+
+                        } else {
+                            System.out.println("You can't use that here.");
+                        }
+
+                    } else {
+                        // Default USE = treat as heal item
+                        Item healItem = player.getItemByName(argument);
+                        if (healItem != null) {
+                            player.heal(healItem);
+                        } else {
+                            System.out.println("Item not in inventory or cannot heal.");
+                        }
+                    }
                     break;
 
                 case "INVENTORY":
@@ -214,11 +245,12 @@ public class RoomLoader {
                         } else {
                             System.out.println("There is no door to examine.");
                         }
-                    } else if (argument.equalsIgnoreCase("panel")) {
+                    } 
+                    else if (argument.equalsIgnoreCase("panel")) {
                         if (current.getId() == 5) {
                             if (current.getLeverSeq1() == 0 &&
-                                    current.getLeverSeq2() == 0 &&
-                                    current.getLeverSeq3() == 0) {
+                                current.getLeverSeq2() == 0 &&
+                                current.getLeverSeq3() == 0) {
                                 System.out.println("You have not attempted to pull the lever yet.");
                             } else {
                                 System.out.println("Your last lever sequence was: " +
@@ -231,7 +263,8 @@ public class RoomLoader {
                         } else {
                             System.out.println("There is no panel to examine.");
                         }
-                    } else {
+                    } 
+                    else {
                         System.out.println("Examine what?");
                     }
                     break;
@@ -341,39 +374,9 @@ public class RoomLoader {
                         } else {
                             System.out.println("There is no panel to reset.");
                         }
-                    } else {
+                    } 
+                    else {
                         System.out.println("Reset what?");
-                    }
-                    break;
-
-                // Use guardian key (room 39 lock)
-                case "USE KEY":
-                    if (argument.equalsIgnoreCase("guardian key")) {
-
-                        if (current.getId() == 39) {
-
-                            Item guardianKey = null;
-                            for (Item it : player.getInventory()) {
-                                if ("DM6".equalsIgnoreCase(it.getId())) {
-                                    guardianKey = it;
-                                    break;
-                                }
-                            }
-
-                            if (guardianKey != null) {
-                                System.out.println("You use the Guardian Key. The way south is now open.");
-                                current.setGuardianDoorUnlocked(true);
-                                // Key is not consumed unless you want it to be
-                            } else {
-                                System.out.println("You don't have the Guardian Key.");
-                            }
-
-                        } else {
-                            System.out.println("You can't use that here.");
-                        }
-
-                    } else {
-                        System.out.println("Use what?");
                     }
                     break;
 
@@ -488,11 +491,13 @@ public class RoomLoader {
                             current.setDM1Placed(true);
                             player.getInventory().remove(itemToPlace);
                             System.out.println("You placed the Scale Fragment onto the altar.");
-                        } else if (itemToPlace.getId().equals("DM4")) {
+                        } 
+                        else if (itemToPlace.getId().equals("DM4")) {
                             current.setDM4Placed(true);
                             player.getInventory().remove(itemToPlace);
                             System.out.println("You placed the Spirit Essence onto the altar.");
-                        } else {
+                        } 
+                        else {
                             System.out.println("This item does not fit into the altar.");
                         }
 
@@ -523,7 +528,8 @@ public class RoomLoader {
                         } else {
                             System.out.println("There is no altar here.");
                         }
-                    } else {
+                    } 
+                    else {
                         System.out.println("Craft what?");
                     }
                     break;
