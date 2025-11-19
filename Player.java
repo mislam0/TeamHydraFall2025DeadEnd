@@ -447,7 +447,6 @@ public class Player {
                         Item drop = monster.getDropItem();
                         if (drop != null && !drop.getName().equals("-") && !drop.getType().equals("Restore")) {
                             inventory.add(drop);
-                            System.out.println(monster.getName() + " dropped " + drop.getName() + "!");
                         }
 
                         // Monster drops health restore item that is auto-used
