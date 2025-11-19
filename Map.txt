@@ -13,7 +13,7 @@
 11|Puzzling|Walls are etched with strange marks. It looks confusing.|12|0|0|9
 12|Stone Walls|Solid stone walls surround you. Claustrophobic.|14|0|11|13
 13|Beast's Lair|Shadows twist unnaturally along the walls.|0|12|0|0
-14|Dingy Hallway|Cobwebs cover broken stone.|15|0|12|0
+14|Dingy Hallway|Cobwebs cover broken stone.|0|15|12|0
 15|Sealed Room|Glowing mushrooms cast eerie light.|0|16|0|14
 16|Dusty Chamber|Dust curls along the floor.|0|18|17|15
 17|Secret Room 2|A hidden room through a short corridor.|16|0|0|0
@@ -23,7 +23,7 @@
 21|Beast Within|Bones and weapons decorate the walls.|20|0|23|22
 22|Dead End|You fell back into the cells. Locked in.|0|0|0|0
 23|Sanctuary|A turning hallway leads onward.|21|24|0|0
-24|Twin Crypts|The stairway led you here.|25|0|0|0
+24|Twin Crypts|The stairway led you here.|25|0|0|23
 25|Trap|A broken altar surrounded by faded murals.|0|26|24|0
 26|Wide Corridor|Dusty tomes and scrolls scattered around.|27|36|31|25
 27|Gallery|Floor covered with bones forming patterns.|28|0|26|0

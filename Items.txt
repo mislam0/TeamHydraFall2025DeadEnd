@@ -7,7 +7,7 @@ DM4|Spirit Essence|A glowing remnant of a fallen spirit. Consuming it restores a
 DM5|Leviathan's Potion|A rare potion brewed from the essence of the Leviathan. Restores all the player's health.|Health|100|-|-|-|Legendary|38
 DM6|Guardian Key|An ancient key left behind by a guardian. It is required to unlock special sealed rooms deeper within the dungeon.|Key|-|-|-|-|Legendary|-
 DM7|Shard of Bone|A jagged fragment of monster bone. Crude but effective as a makeshift weapon, capable of dealing light damage.|Weapon|-|1|-|d4|Uncommon|-
-DM8|Guardian Sword|A legendary blade dropped by a powerful guardian. Required to defeat the Leviathan Shade. Infused with ancient energy, it deals high damage.|Weapon|-|15|-|d12|Legendary|-
+DM8|Guardian Sword|A legendary blade dropped by a powerful guardian. Required to defeat the Leviathan Shade. Infused with ancient energy, it deals high damage.|Weapon|-|15|-|d12|Legendary|36
 DM9|Mystic Cloak|A cloak infused with faint magical energy. Wearing it slightly reduces incoming damage and boosts survivability.|Defense|-|-|0.15|-|Legendary|-
 DM10|Herbal Salve|A natural healing ointment made from rare herbs. Restores a small portion of health instantly when used.|Health|15|-|-|-|Rare|31
 DM11|Better Health Restoration|Restores a small amount of health. A basic healing item often found after defeating weaker monsters.|Restore|25|-|-|-|Epic|-

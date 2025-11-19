@@ -30,7 +30,6 @@ public class RoomLoader {
             itemNameMap.put(it.getName(), it);
         }
     }
-    
 
     public void startGame(Player player, Scanner scanner) {
         if (rooms.isEmpty()) {
@@ -43,11 +42,16 @@ public class RoomLoader {
         Room current = roomMap.get(player.getCurrentRoomNumber());
         player.enterRoom(current, scanner, roomMap);
         player.enterRoom(current, scanner);
-        
 
         boolean playing = true;
 
         while (playing) {
+
+            // TRYING THIS RN WHILST IN CALL: Keep 'current' in sync with where the player actually is
+            Room playerRoom = roomMap.get(player.getCurrentRoomNumber());
+            if (playerRoom != null) {
+                current = playerRoom;
+            }
 
             System.out.println("\nAvailable exits: [" +
                     String.join(", ", current.getExits().keySet()) + "]");
@@ -93,7 +97,7 @@ public class RoomLoader {
                     if (toPick != null) {
                         player.pickUp(toPick);
                         current.removeItem(toPick);
-                        
+
                     } else System.out.println("Item not found.");
                     break;
 
@@ -135,7 +139,7 @@ public class RoomLoader {
                     else System.out.println("Item not in inventory.");
                     break;
 
-                    case "USE":
+                case "USE":
                     Item healItem = player.getItemByName(argument);
                     if (healItem != null) player.heal(healItem);
                     else System.out.println("Item not in inventory or cannot heal.");
@@ -154,7 +158,7 @@ public class RoomLoader {
                     player.printStatus();
                     break;
 
-                    // Save game from rah
+                // Save game from rah
                 case "SAVE":
                     if (argument.isEmpty()) {
                         System.out.println("Usage: SAVE <name>");
@@ -210,12 +214,11 @@ public class RoomLoader {
                         } else {
                             System.out.println("There is no door to examine.");
                         }
-                    } 
-                    else if (argument.equalsIgnoreCase("panel")) {
+                    } else if (argument.equalsIgnoreCase("panel")) {
                         if (current.getId() == 5) {
                             if (current.getLeverSeq1() == 0 &&
-                                current.getLeverSeq2() == 0 &&
-                                current.getLeverSeq3() == 0) {
+                                    current.getLeverSeq2() == 0 &&
+                                    current.getLeverSeq3() == 0) {
                                 System.out.println("You have not attempted to pull the lever yet.");
                             } else {
                                 System.out.println("Your last lever sequence was: " +
@@ -228,8 +231,7 @@ public class RoomLoader {
                         } else {
                             System.out.println("There is no panel to examine.");
                         }
-                    } 
-                    else {
+                    } else {
                         System.out.println("Examine what?");
                     }
                     break;
@@ -339,8 +341,7 @@ public class RoomLoader {
                         } else {
                             System.out.println("There is no panel to reset.");
                         }
-                    } 
-                    else {
+                    } else {
                         System.out.println("Reset what?");
                     }
                     break;
@@ -487,13 +488,11 @@ public class RoomLoader {
                             current.setDM1Placed(true);
                             player.getInventory().remove(itemToPlace);
                             System.out.println("You placed the Scale Fragment onto the altar.");
-                        } 
-                        else if (itemToPlace.getId().equals("DM4")) {
+                        } else if (itemToPlace.getId().equals("DM4")) {
                             current.setDM4Placed(true);
                             player.getInventory().remove(itemToPlace);
                             System.out.println("You placed the Spirit Essence onto the altar.");
-                        } 
-                        else {
+                        } else {
                             System.out.println("This item does not fit into the altar.");
                         }
 
@@ -524,8 +523,7 @@ public class RoomLoader {
                         } else {
                             System.out.println("There is no altar here.");
                         }
-                    } 
-                    else {
+                    } else {
                         System.out.println("Craft what?");
                     }
                     break;
@@ -566,10 +564,9 @@ public class RoomLoader {
 
                 default:
                     System.out.println("Unknown command: " + rawInput);
-                }
             }
         }
-    
+    }
 
     private int parseIntOrDefault(String s, int def) {
         try {
@@ -597,6 +594,7 @@ public class RoomLoader {
         if (t.startsWith("w")) return "WEST";
         return t.toUpperCase();
     }
+
     private Map<String, Monster> buildMonsterMap() {
         Map<String, Monster> out = new HashMap<>();
         for (Room r : roomMap.values()) {
